@@ -1,4 +1,5 @@
 import Navbar from "../../components/Navbar"
+import Newreleases from "../../components/Newreleases"
 
 const Index = () => {
     const content = (
@@ -13,6 +14,7 @@ const Index = () => {
                     Suscipit, consectetur? Iusto nesciunt voluptates eaque dolorem?
                 </p>
             </div>
+            <Newreleases />
         </>
     )
 
