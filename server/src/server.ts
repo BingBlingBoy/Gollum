@@ -42,37 +42,21 @@ const getNewReleases = async (token: string) => {
 }
 
 const search = async (token: string, type: string, query: string) => {
-    console.log(token)
-    const searchParameters = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }
-    // const result = await fetch('https://api.spotify.com/v1/search?' +`type=${type}&` + `q=${query}` , searchParameters)
-
     try {
-        const response = await fetch('https://api.spotify.com/v1/search?q=' + query + `&type=${type}`, searchParameters)
-        if (!response.ok) {
+        const result = await fetch('https://api.spotify.com/v1/search?q=' + query + `&type=${type}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        if (!result.ok) {
             throw new Error("Couldn't fetch data")
         }
-        const data = await response.json()
+        const data = await result.json()
         return data
     } catch (error) {
         return error
     }
-    // const result = await fetch(`https://api.spotify.com/v1/search?q=kendrick&type=album`, {
-    //     method: 'GET',
-    //     headers: {
-    //         'content-type' : 'application/json', 
-    //         'Authorization' : 'Bearer ' + token
-    //     }
-    // })
-
-    // console.log(result)
-    //
-    // const data = await result.json()
-    // return data
 }
 
 app.get('/spotify/getToken', async (req, res) => {
