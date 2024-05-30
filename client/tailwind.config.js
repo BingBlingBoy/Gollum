@@ -14,8 +14,7 @@ export default {
         "secondary": "#8fb6de",
         "accent": "#6a81d3",
         "best-gray": "#f7f7f7"
-      }
-
+      },
     },
   },
   plugins: [],

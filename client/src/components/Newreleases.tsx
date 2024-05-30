@@ -33,11 +33,27 @@ const Newreleases = () => {
     }
   }
 
+  // const webPlayback = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:3000/spotify/getToken")
+  //     const data = await response.json()
+  //
+  //     return data
+  //
+  //   } catch (error) {
+  //     throw new Error("failed to get token")
+  //   }
+  // }
+
   const {data: newReleases, error, isLoading} = useQuery({
     queryKey: ['newReleases'],
     queryFn: retrieveNewAlbumReleases
   })
 
+  // const {data: getToken} = useQuery({
+  //   queryKey: ['get_token'],
+  //   queryFn: webPlayback 
+  // })
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -7,11 +7,16 @@ import {
 } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
+import Search from './pages/search/Search.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
+  },
+  {
+    path: "/search",
+    element: <Search />
   }
 ])
 

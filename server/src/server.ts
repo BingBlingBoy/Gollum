@@ -59,6 +59,34 @@ const search = async (token: string, type: string, query: string) => {
     }
 }
 
+const searchNoType = async (token: string, query: string) => {
+    try {
+        const result = await fetch('https://api.spotify.com/v1/search?q=' + query + `&type=album%2Ctrack`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        if (!result.ok) {
+            throw new Error("Couldn't fetch data")
+        }
+        const data = await result.json()
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
+const generateRandomString = (length: number) => {
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  };
+
 app.get('/spotify/getToken', async (req, res) => {
     try {
         const token = await getSpotifyAccessToken();
@@ -97,6 +125,45 @@ app.get('/spotify/search/:type/:query', async (req, res) => {
         res.status(500).json({error: 'Failed to get new Released albums'})
     }
 })
+
+app.get('/spotify/search/:query', async (req, res) => {
+    try {
+        const query = req.params.query
+
+        const token = await getSpotifyAccessToken()
+        const searchResultsNoType = await searchNoType(token.access_token, query);
+        res.json({
+            type: searchResultsNoType
+        })
+    } catch (error) {
+        res.status(500).json({error: 'Failed to get new Released albums'})
+    }
+})
+
+app.get('/spotify/login', (req, res) => {
+
+    const scope = "streaming \
+                 user-read-email \
+                 user-read-private"
+  
+    const state = generateRandomString(16);
+
+    if (!clientId) {
+        throw new Error("client id not defined")
+    }
+  
+    const auth_query_parameters = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      scope: scope,
+      redirect_uri: "http://localhost:5173/",
+      state: state
+    })
+  
+    res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
+  })
+
+
 app.listen(port, () => {
     console.log(`Server goes on http://localhost:${port}`)
 })
