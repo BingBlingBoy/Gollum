@@ -111,7 +111,7 @@ app.get('/spotify/newReleases', async (req, res) => {
     }
 })
 
-app.get('/spotify/search/:type/:query', async (req, res) => {
+app.get('/spotify/search/:query/:type', async (req, res) => {
     try {
         const type = req.params.type
         const query = req.params.query
