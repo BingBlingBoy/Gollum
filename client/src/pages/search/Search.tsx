@@ -159,7 +159,7 @@ const Search = () => {
                                             ))}    
                                         </div>
                                         <div className="flex justify-end">
-                                            <button className="text-accent font-semibold pr-1" type="submit">More</button>
+                                            <button onClick={retrieveArtistSearchResult} className="text-accent font-semibold pr-1" type="submit">More</button>
                                         </div>
                                     </>
                                 }
