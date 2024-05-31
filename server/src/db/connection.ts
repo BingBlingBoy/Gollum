@@ -1,6 +1,10 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import dotenv from "dotenv"
+import mongoose from "mongoose";
 
-const uri = "mongodb+srv://users:Streamintel12@cluster0.bil7hgg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" || "";
+dotenv.config()
+
+const uri = `${process.env.MONGO_URI}` || "";
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -13,6 +17,7 @@ const run = async () => {
 
     try {
         // Connect the client to the server
+        await mongoose.connect(`${process.env.MONGO_URI}`)
         await client.connect();
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
@@ -21,13 +26,11 @@ const run = async () => {
         );
     } catch(err) {
         console.error(err);
-    } finally {
-        await client.close()
     }
 }
 
-run()
+// run()
+//
+// let db = client.db("employees");
 
-let db = client.db("employees");
-
-export default db;
+export default run;

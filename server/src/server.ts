@@ -1,15 +1,20 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
-import db from "./db/connection";
+import run from "./db/connection";
+import User from "./models/userModel";
+import bodyParser = require("body-parser");
 
+run()
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT 
 
 app.use(cors())
-
+const jsonParser = bodyParser.json()
+ 
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 
@@ -83,6 +88,49 @@ const generateRandomString = (length: number) => {
     }
     return text;
   };
+
+const registerUser = async (name: string, email: string) => {
+    
+    const userExists = await User.findOne({email}) 
+
+    if (userExists) {
+        return {
+            success: false,
+            reason: "user exists"
+        }
+    }
+
+    const user = await User.create({
+        name,
+        email,
+        likedAlbums: {},
+        likedArtists: {},
+        likedTracks: {}
+    });
+
+    const success = {
+        success: true 
+    }
+
+    if (user) {
+        return success
+    } else {
+        throw new Error('Invalid user data')
+    }
+}
+
+app.post('/users/register', jsonParser, async (req, res) => {
+    // try {
+        const {name, email} = req.body
+        console.log(name)
+        console.log(email)
+        const regUser = await registerUser(name, email)
+        console.log(regUser)
+    // } catch (error) {
+    //     throw new Error("Could not register new user")
+    // }
+})
+
 
 app.get('/spotify/getToken', async (req, res) => {
     try {
@@ -160,7 +208,6 @@ app.get('/spotify/login', (req, res) => {
     res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
   })
 
-console.log(db)
 
 app.listen(port, () => {
     console.log(`Server goes on http://localhost:${port}`)

@@ -3,10 +3,9 @@ import mongoose, { Schema, model, connect } from "mongoose";
 interface IUser {
     name: string
     email: string
-    password: string
     likedAlbums: LikedAlbums
     likedTracks: LikedTracks
-    likedArtist: LikedArtist
+    likedArtists: LikedArtists
 }
 
 interface LikedAlbums {
@@ -21,7 +20,7 @@ interface LikedTracks {
     artistName: string
 }
 
-interface LikedArtist {
+interface LikedArtists {
     artistName: string
     imageURL: string
 }
@@ -36,20 +35,16 @@ const userSchema = new Schema<IUser>({
         required: true,
         unique: true
     },
-    password: {
-        type: String,
-        required: true,
-    },
     likedAlbums: {
         type: Object,
         default: {}
     },
-    likedArtist: {
-        type: String,
+    likedArtists: {
+        type: Object,
         default: {}
     },
     likedTracks: {
-        type: String,
+        type: Object,
         default: {}
     },
 
