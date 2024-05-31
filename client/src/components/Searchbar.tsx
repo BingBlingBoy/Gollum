@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 const Searchbar = () => {
 
     const [query, setQuery] = useState("")
     const navigate = useNavigate()
-
-    useEffect(() => {
-        console.log(query)
-    },[query])
 
     const search = (e: React.FormEvent<EventTarget>) => {
         e.preventDefault()

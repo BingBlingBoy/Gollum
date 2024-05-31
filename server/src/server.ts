@@ -61,7 +61,7 @@ const search = async (token: string, type: string, query: string) => {
 
 const searchNoType = async (token: string, query: string) => {
     try {
-        const result = await fetch('https://api.spotify.com/v1/search?q=' + query + `&type=album%2Ctrack`, {
+        const result = await fetch('https://api.spotify.com/v1/search?q=' + query + '&type=album%2Ctrack%2Cartist&limit=8', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
