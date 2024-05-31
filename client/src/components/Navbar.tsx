@@ -3,8 +3,8 @@ import Searchbar from "./Searchbar"
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
-
-    const { loginWithRedirect } = useAuth0();
+    
+    const { loginWithRedirect, logout } = useAuth0();
     const content = (
         <>
             <nav className="px-6 py-3 bg-primary text-white flex flex-row font-aileron justify-between items-center">
@@ -13,6 +13,9 @@ const Navbar = () => {
                 <ul className="flex flex-row gap-x-8 text-lg text-nowrap">
                     <li><Link to={`/`}>Home</Link></li>
                     <button onClick={() => loginWithRedirect()}>Sign up/Log In</button>
+                    <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+                        Log Out
+                    </button>
                 </ul>
             </nav>
         </>
