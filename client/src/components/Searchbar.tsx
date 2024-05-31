@@ -9,6 +9,7 @@ const Searchbar = () => {
     const search = (e: React.FormEvent<EventTarget>) => {
         e.preventDefault()
         navigate("/search", { state: { query } })
+        // navigate(0)
     }
 
     const content = (
