@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 import Navbar from "../../components/Navbar"
 import Newreleases from "../../components/Newreleases"
 import { useEffect } from "react"
+import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
 
@@ -15,41 +16,29 @@ const Index = () => {
         isAuthenticated
     } = useAuth0()
 
-    const postUser = async (data: Data) => {
-        console.log(data)
-        await fetch('http://localhost:3000/users/register', {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) 
-        })
-    }
-
-    // const mutation = useMutation({
-    //     mutationFn: async (send: Data) => {
-    //         await fetch('http://localhost:3000/users/register', {
-    //             method: "POST",
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(send) 
-    //         })
-    //         
-    //     }
-    // })
+    const mutation = useMutation({
+        mutationFn: async (send: Data) => {
+            await fetch('http://localhost:3000/users/register', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(send) 
+            })
+            
+        }
+    })
 
     useEffect(() => {
         console.log(isAuthenticated)
         if (isAuthenticated) {
+            
             const data = {
                 name: user?.name,
                 email: user?.email
             }
-            console.log(JSON.stringify(data))
-            postUser(data)
+            mutation.mutate(data)
         }
     },[isAuthenticated])
 

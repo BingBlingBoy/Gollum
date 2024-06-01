@@ -120,15 +120,12 @@ const registerUser = async (name: string, email: string) => {
 }
 
 app.post('/users/register', jsonParser, async (req, res) => {
-    // try {
+    try {
         const {name, email} = req.body
-        console.log(name)
-        console.log(email)
-        const regUser = await registerUser(name, email)
-        console.log(regUser)
-    // } catch (error) {
-    //     throw new Error("Could not register new user")
-    // }
+        await registerUser(name, email)
+    } catch (error) {
+        throw new Error("Could not register new user")
+    }
 })
 
 
