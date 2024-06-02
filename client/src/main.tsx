@@ -8,6 +8,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
 import Search from './pages/search/Search.tsx'
+import Profile from './pages/profile/Profile.tsx'
 import { Auth0Provider } from '@auth0/auth0-react'
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     path: "/search",
     element: <Search />
   },
+  {
+    path: "/profile",
+    element: <Profile />
+  }
 ])
 
 const queryClient = new QueryClient();

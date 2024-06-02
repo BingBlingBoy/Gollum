@@ -3,6 +3,7 @@ import mongoose, { Schema, model, connect } from "mongoose";
 interface IUser {
     name: string
     email: string
+    spotifyAccount: string
     likedAlbums: LikedAlbums
     likedTracks: LikedTracks
     likedArtists: LikedArtists
@@ -34,6 +35,10 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true,
         unique: true
+    },
+    spotifyAccount: {
+        type: String,
+        unique: true,
     },
     likedAlbums: {
         type: Object,

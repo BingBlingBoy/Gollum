@@ -31,7 +31,6 @@ const Index = () => {
     })
 
     useEffect(() => {
-        console.log(isAuthenticated)
         if (isAuthenticated) {
             
             const data = {

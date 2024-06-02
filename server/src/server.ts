@@ -119,6 +119,57 @@ const registerUser = async (name: string, email: string) => {
     }
 }
 
+const getCurrentUsersProfile = async (token: string) => {
+    try {
+        console.log("HEllo")
+        const response = await fetch("https://api.spotify.com/v1/me", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        throw new Error("Couldn't get spotify account")
+    }
+
+}
+
+// const getSpotifyAccount = async (userEmail: string) => {
+//     try {
+//         const user = await User.find({email: userEmail})
+//         console.log(user)
+//         return user[0] 
+//     } catch (error) {
+//         console.log(error)
+//     }
+// } 
+
+app.post('/spotify/getUserToken/', jsonParser, async (req, res) => {
+    try {
+        const token = req.body.accessToken
+        const spotifyProfile = await getCurrentUsersProfile(token)
+        console.log(spotifyProfile)
+        res.json(spotifyProfile);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to retrieve access token ${error}`});
+    }
+});
+
+// app.get('/spotify/profile/:email', async (req, res) => {
+//     try {
+//         const userEmail = req.params.email
+//         const data =  await getSpotifyAccount(userEmail)    
+//         console.log(data)
+//         res.json({
+//             spotifyUserAccount: data?.spotifyAccount
+//         })
+//     } catch (error) {
+//         throw new Error("Couldn't get spotify account")
+//     }    
+// })
+
 app.post('/users/register', jsonParser, async (req, res) => {
     try {
         const {name, email} = req.body
@@ -198,7 +249,7 @@ app.get('/spotify/login', (req, res) => {
       response_type: "code",
       client_id: clientId,
       scope: scope,
-      redirect_uri: "http://localhost:5173/",
+      redirect_uri: "http://localhost:5173/profile",
       state: state
     })
   
