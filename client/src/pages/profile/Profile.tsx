@@ -52,8 +52,8 @@ const Profile = () => {
                 localStorage.setItem("expiresIn", expires_in);
                 setUserHasToken(true)
             }
-
         }
+        setInterval(linkSpotifyAccount, 60000)
 
     }, []);
     
