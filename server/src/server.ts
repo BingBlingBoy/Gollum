@@ -160,6 +160,41 @@ const getUserRecentTracks = async (token: string) => {
 //     }
 // } 
 
+const getRefreshToken = async (token: string) => {
+    const url = "https://accounts.spotify.com/api/token";
+    const bodyJSON = {
+        grant_type: 'refresh_token',
+        refresh_token: token,
+        client_id: clientId
+    }
+
+    const payload = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: JSON.stringify(bodyJSON)
+    }
+    try {
+        const body = await fetch(url, payload);
+        const response =  await body.json();
+        return response
+    } catch (error) {
+        throw new Error(`Error: ${error}`)
+    }
+}
+
+
+app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
+    try {
+        const token = req.body.refreshToken
+        const response = getRefreshToken(token)
+        console.log(response)
+    } catch (error) {
+        
+    }
+})
+
 app.post('/spotify/user/recenttracks', jsonParser, async (req, res) => {
     try {
         const token = req.body.spotify_user_token
@@ -172,7 +207,7 @@ app.post('/spotify/user/recenttracks', jsonParser, async (req, res) => {
     }
 });
 
-app.post('/spotify/getUserToken/', jsonParser, async (req, res) => {
+app.post('/spotify/getUserProfile/', jsonParser, async (req, res) => {
     try {
         const token = req.body.accessToken
         const spotifyProfile = await getCurrentUsersProfile(token)
