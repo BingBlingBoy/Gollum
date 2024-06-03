@@ -235,7 +235,7 @@ app.post('/users/register', jsonParser, async (req, res) => {
         const {name, email} = req.body
         await registerUser(name, email)
     } catch (error) {
-        throw new Error("Could not register new user")
+        throw new Error(`Could not register new user: ${error}`)
     }
 })
 

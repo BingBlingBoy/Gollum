@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar"
 import Newreleases from "../../components/Newreleases"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
+import LikeAndDislike from "../../components/LikeAndDislike"
 
 const Index = () => {
 
@@ -31,14 +32,14 @@ const Index = () => {
     })
 
     useEffect(() => {
-        if (isAuthenticated) {
-            
-            const data = {
-                name: user?.name,
-                email: user?.email
-            }
-            mutation.mutate(data)
-        }
+        // if (isAuthenticated) {
+        //     
+        //     const data = {
+        //         name: user?.name,
+        //         email: user?.email
+        //     }
+        //     mutation.mutate(data)
+        // }
     },[isAuthenticated])
 
     const content = (
@@ -53,6 +54,7 @@ const Index = () => {
                     Consequatur odit debitis totam. Dignissimos, enim corrupti.
                     Suscipit, consectetur? Iusto nesciunt voluptates eaque dolorem?
                 </p>
+                <LikeAndDislike />
             </div>
             <Newreleases />
         </>
