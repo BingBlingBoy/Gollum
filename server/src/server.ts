@@ -119,6 +119,7 @@ const registerUser = async (name: string, email: string) => {
     }
 }
 
+
 const getCurrentUsersProfile = async (token: string) => {
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
@@ -184,6 +185,41 @@ const getRefreshToken = async (token: string) => {
     }
 }
 
+const addLikedAlbums = async (name: string, image: string, href: string, type: string, userEmail: string) => {
+    const userExists = await User.findOne({email: userEmail}) 
+    console.log(userExists)
+
+    if (userExists) {
+        const albumId = href 
+        console.log(href)
+        const albumName = name
+        const albumImage = image
+
+        const newAlbum = {
+            albumName,
+            albumImage
+        }
+
+        userExists.likedAlbums = {
+            ...userExists.likedAlbums,
+            [albumId]: newAlbum
+        }
+        console.log("hello")
+        const updatedUser = await userExists.save();
+        console.log("saved object: ",updatedUser.likedAlbums)
+    }
+    
+}
+
+app.post('/user/add/albums', jsonParser, async (req, res) => {
+    try {
+        const {name, image, href, type, userEmail} = req.body
+        console.log(href)
+        const response = addLikedAlbums(name, image, href, type, userEmail)
+    } catch (error) {
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
 
 app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
     try {
@@ -191,7 +227,7 @@ app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
         const response = getRefreshToken(token)
         console.log(response)
     } catch (error) {
-        
+        throw new Error(`Couldn't get refresh token: ${error}`)
     }
 })
 

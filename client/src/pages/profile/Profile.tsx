@@ -1,7 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "../../components/Navbar"
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 interface SpotifyToken {
     display_name: string,
@@ -85,7 +84,7 @@ const Profile = () => {
         }
     }
 
-    const {data: userRecentlyListenedTracks} = useQuery({
+    const {data: userRecentlyListenedTracks, isFetching: fetchingRecentTracks} = useQuery({
         queryKey: ["recentlyListenedTracks"],
         queryFn: getUserRecentTracks 
     })
@@ -95,9 +94,9 @@ const Profile = () => {
         queryFn: linkSpotifyAccount
     })
 
-    useEffect(() => {
-        console.log(userRecentlyListenedTracks)
-    },[])
+    // useEffect(() => {
+    //     console.log(userRecentlyListenedTracks)
+    // },[])
 
     const content = (
         <>
@@ -126,16 +125,21 @@ const Profile = () => {
                                     <div className="ml-20">
                                         <h1 className="font-bond text-black text-3xl font-bold mb-4">Recent Tracks</h1>
                                         <div className="flex flex-col bg-best-gray w-99">
-                                            {userRecentlyListenedTracks.items.map((data: Track, i: number) => (
-                                                <div className="flex justify-between my-2 items-center" key={i}>
-                                                    <div className="flex flex-row gap-x-2 items-center">
-                                                        <img className="w-10 h-10" src={data.track.album.images[2].url} alt="album image" />
-                                                        <h1>{data.track.name}</h1>
-                                                    </div>
-                                                    <p className="pr-4">{data.track.artists[0].name}</p>
+                                            {
+                                                !fetchingRecentTracks &&
+                                                <>
+                                                    {userRecentlyListenedTracks.items.map((data: Track, i: number) => (
+                                                        <div className="flex justify-between my-2 items-center" key={i}>
+                                                            <div className="flex flex-row gap-x-2 items-center">
+                                                                <img className="w-10 h-10" src={data.track.album.images[2].url} alt="album image" />
+                                                                <h1>{data.track.name}</h1>
+                                                            </div>
+                                                            <p className="pr-4">{data.track.artists[0].name}</p>
 
-                                                </div>
-                                            ))}
+                                                        </div>
+                                                    ))}
+                                            </>    
+                                            }
                                         </div>
                                     </div>
                                 </>

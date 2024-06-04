@@ -1,11 +1,73 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { useAuth0 } from "@auth0/auth0-react"
 
-const LikeAndDislike = () => {
+
+interface Artists {
+    name: string
+    images: Image[]
+    href: string
+}
+
+interface Albums {
+    name: string
+    images: Image[]
+    artists: ArtistFromAlbum[]
+    href: string 
+}
+
+interface ArtistFromAlbum {
+    name: string
+    external_urls: ExternalURLs
+}
+
+interface Image {
+    url: string
+}
+
+interface ExternalURLs {
+    spotify: string
+}
+
+interface propsData {
+    data: Artists|Albums,
+    type: string
+}
+
+const LikeAndDislike = (props: propsData) => {
+
+    const { user } = useAuth0()
+
+    const sendLikedAlbumToUser = async (_data: Artists|Albums) => {
+        try {
+            console.log(_data.href)
+            const response = await fetch('http://localhost:3000/user/add/albums', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: _data.name,
+                    image: _data.images,
+                    href: _data.href,
+                    type: props.type,
+                    userEmail: user?.email
+                })
+            })
+            const data = await response.json()
+            console.log(data)
+            
+        } catch (error) {
+            throw new Error(`Couldn't send liked albums to database: ${error}`)
+        }
+    }
+
+
     const content = (
         <div className="w-full flex items-center justify-between bg-gray-50 p-2">
-            <button>
+            <button onClick={() => {sendLikedAlbumToUser(props.data)}}>
                 <FontAwesomeIcon id="Hello" className="w-8 h-8 text-gray-300" icon={faThumbsUp as IconProp} />
             </button>
             <button>

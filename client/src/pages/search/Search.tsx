@@ -13,6 +13,7 @@ const Search = () => {
         name: string
         images: Image[]
         external_urls: ExternalURLs
+        href: string
     }
 
     interface Albums {
@@ -159,7 +160,7 @@ const Search = () => {
                                                             <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                             <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                         </div>
-                                                        <LikeAndDislike />
+                                                        <LikeAndDislike data={data} type={"Album"}/>
                                                     </div>
                                                 </>
                                             ))}    
@@ -183,7 +184,7 @@ const Search = () => {
                                                                 <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
-                                                            <LikeAndDislike />
+                                                            <LikeAndDislike data={data} type={"Album"}/>
                                                         </div>
                                                     </>
                                                 ))}    
@@ -208,7 +209,6 @@ const Search = () => {
                                                                 <img className="w-full h-full" src={data.album.images.length !== 0 ? data.album.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
-                                                            <LikeAndDislike />
                                                         </div>
                                                     </>
                                                 ))}    
