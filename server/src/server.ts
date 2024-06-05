@@ -185,13 +185,11 @@ const getRefreshToken = async (token: string) => {
     }
 }
 
-const addLikedAlbums = async (name: string, image: string, href: string, type: string, userEmail: string) => {
+const addLikedAlbums = async (name: string, image: string, href: string, userEmail: string) => {
     const userExists = await User.findOne({email: userEmail}) 
-    console.log(userExists)
 
     if (userExists) {
         const albumId = href 
-        console.log(href)
         const albumName = name
         const albumImage = image
 
@@ -204,20 +202,59 @@ const addLikedAlbums = async (name: string, image: string, href: string, type: s
             ...userExists.likedAlbums,
             [albumId]: newAlbum
         }
-        console.log("hello")
-        const updatedUser = await userExists.save();
-        console.log("saved object: ",updatedUser.likedAlbums)
+        await userExists.save();
+        // console.log("saved object: ",updatedUser.likedAlbums)
+    } else {
+        throw new Error("Couldn't find user")
     }
-    
 }
 
-app.post('/user/add/albums', jsonParser, async (req, res) => {
+const addLikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
+    const userExists = await User.findOne({email: userEmail})
+
+    if (userExists) {
+        const newAlbum = {
+            name,
+            image
+        }
+
+        userExists.likedArtists = {
+            ...userExists.likedArtists,
+            [href]: newAlbum
+        }
+        await userExists.save()
+    } else {
+        throw new Error("Couldn't find user")
+    }
+}
+
+app.post('/user/add/album', jsonParser, async (req, res) => {
     try {
-        const {name, image, href, type, userEmail} = req.body
-        console.log(href)
-        const response = addLikedAlbums(name, image, href, type, userEmail)
+        const {name, image, href, userEmail} = req.body
+        addLikedAlbums(name, image, href, userEmail)
+        res.status(200).json({
+            success: true
+        })
     } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
         throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+app.post('/user/add/artist', jsonParser, async(req, res) => {
+    try {
+        const {name, image, href, userEmail} = req.body
+        addLikedArtist(name, image, href, userEmail)
+        res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add artists: ${error}`)
     }
 })
 
