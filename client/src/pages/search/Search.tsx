@@ -160,7 +160,7 @@ const Search = () => {
                                                             <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                             <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                         </div>
-                                                        <LikeAndDislike data={data} type={"Album"}/>
+                                                        <LikeAndDislike data={data} type={"artist"}/>
                                                     </div>
                                                 </>
                                             ))}    
@@ -184,7 +184,7 @@ const Search = () => {
                                                                 <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
-                                                            <LikeAndDislike data={data} type={"Album"}/>
+                                                            <LikeAndDislike data={data} type={"album"}/>
                                                         </div>
                                                     </>
                                                 ))}    

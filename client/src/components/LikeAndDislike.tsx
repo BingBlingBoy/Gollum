@@ -39,10 +39,10 @@ const LikeAndDislike = (props: propsData) => {
 
     const { user } = useAuth0()
 
-    const sendLikedAlbumToUser = async (_data: Artists|Albums) => {
+    const sendLikedItemToUser = async (_data: Artists|Albums) => {
         try {
             console.log(_data.href)
-            const response = await fetch(`http://localhost:3000/user/add/${props.type}`, {
+            const response = await fetch(`http://localhost:3000/user/add/liked${props.type}`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -50,7 +50,7 @@ const LikeAndDislike = (props: propsData) => {
                 },
                 body: JSON.stringify({
                     name: _data.name,
-                    image: _data.images,
+                    image: _data.images[0],
                     href: _data.href,
                     userEmail: user?.email
                 })
@@ -63,13 +63,35 @@ const LikeAndDislike = (props: propsData) => {
         }
     }
 
+    const sendDislikedItemToUser = async (_data: Artists|Albums) => {
+        try {
+            const response = await fetch(`http://localhost:3000/user/add/disliked${props.type}`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: _data.name,
+                    image: _data.images[0],
+                    href: _data.href,
+                    userEmail: user?.email
+                })
+            })
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            throw new Error(`Couldn't add disliked albums to database: ${error}`)
+        }
+    }
+
 
     const content = (
         <div className="w-full flex items-center justify-between bg-gray-50 p-2">
-            <button onClick={() => {sendLikedAlbumToUser(props.data)}}>
+            <button onClick={() => {sendLikedItemToUser(props.data)}}>
                 <FontAwesomeIcon id="Hello" className="w-8 h-8 text-gray-300" icon={faThumbsUp as IconProp} />
             </button>
-            <button>
+            <button onClick={() => {sendDislikedItemToUser(props.data)}}>
                 <FontAwesomeIcon className="w-8 h-8 text-gray-300" icon={faThumbsDown as IconProp}/>
             </button>
         </div>

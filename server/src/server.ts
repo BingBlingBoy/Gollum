@@ -209,6 +209,30 @@ const addLikedAlbums = async (name: string, image: string, href: string, userEma
     }
 }
 
+const addDislikedAlbums = async (name: string, image: string, href: string, userEmail: string) => {
+    const userExists = await User.findOne({email: userEmail}) 
+
+    if (userExists) {
+        const albumId = href 
+        const albumName = name
+        const albumImage = image
+
+        const newAlbum = {
+            albumName,
+            albumImage
+        }
+
+        userExists.dislikedAlbums = {
+            ...userExists.dislikedAlbums,
+            [albumId]: newAlbum
+        }
+        await userExists.save();
+        // console.log("saved object: ",updatedUser.likedAlbums)
+    } else {
+        throw new Error("Couldn't find user")
+    }
+}
+
 const addLikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
     const userExists = await User.findOne({email: userEmail})
 
@@ -228,7 +252,31 @@ const addLikedArtist = async (name: string, image: string, href: string, userEma
     }
 }
 
-app.post('/user/add/album', jsonParser, async (req, res) => {
+const addDislikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
+    const userExists = await User.findOne({email: userEmail}) 
+
+    if (userExists) {
+        const albumId = href 
+        const albumName = name
+        const albumImage = image
+
+        const newAlbum = {
+            albumName,
+            albumImage
+        }
+
+        userExists.dislikedArtists = {
+            ...userExists.dislikedArtists,
+            [albumId]: newAlbum
+        }
+        await userExists.save();
+        // console.log("saved object: ",updatedUser.likedAlbums)
+    } else {
+        throw new Error("Couldn't find user")
+    }
+}
+
+app.post('/user/add/likedalbum', jsonParser, async (req, res) => {
     try {
         const {name, image, href, userEmail} = req.body
         addLikedAlbums(name, image, href, userEmail)
@@ -243,10 +291,40 @@ app.post('/user/add/album', jsonParser, async (req, res) => {
     }
 })
 
-app.post('/user/add/artist', jsonParser, async(req, res) => {
+app.post('/user/add/dislikedartist', jsonParser, async (req, res) => {
+    try {
+        const {name, image, href, userEmail} = req.body
+        addDislikedArtist(name, image, href, userEmail)
+        res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+app.post('/user/add/likedartist', jsonParser, async(req, res) => {
     try {
         const {name, image, href, userEmail} = req.body
         addLikedArtist(name, image, href, userEmail)
+        res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add artists: ${error}`)
+    }
+})
+
+app.post('/user/add/dislikedalbum', jsonParser, async(req, res) => {
+    try {
+        const {name, image, href, userEmail} = req.body
+        addDislikedAlbums(name, image, href, userEmail)
         res.status(200).json({
             success: true
         })

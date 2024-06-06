@@ -7,6 +7,8 @@ interface IUser {
     likedAlbums: LikedAlbums
     likedTracks: LikedTracks
     likedArtists: LikedArtists
+    dislikedAlbums: LikedAlbums
+    dislikedArtists: LikedArtists
 }
 
 interface LikedAlbums {
@@ -45,6 +47,14 @@ const userSchema = new Schema<IUser>({
         default: {}
     },
     likedArtists: {
+        type: Object,
+        default: {}
+    },
+    dislikedAlbums: {
+        type: Object,
+        default: {}
+    },
+    dislikedArtists: {
         type: Object,
         default: {}
     },
