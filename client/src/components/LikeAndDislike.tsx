@@ -39,15 +39,6 @@ interface propsData {
     type: string
 }
 
-interface Album {
-    albumName: string;
-    albumImage: string;
-}
-
-interface RatedAlbums {
-    [albumId: string] : Album
-}
-
 const LikeAndDislike = (props: propsData) => {
 
     const [like, setLike] = useState(false)
@@ -115,7 +106,7 @@ const LikeAndDislike = (props: propsData) => {
                 })
                 
             })
-            const data = response.json()
+            const data = await response.json()
             return data
         } catch (error) {
             throw new Error(`Couldn't get liked albums: ${error}`)
@@ -128,6 +119,9 @@ const LikeAndDislike = (props: propsData) => {
     })
 
     useEffect(() => {
+        // Try
+        // if (ratedalbum.length != 0) without test objects
+        // if (Object.keys(ratedalbum).length == 0)
         if (ratedalbum) {
             if (props.data.id in ratedalbum.ratedAlbums.likedAlbums) {
                 setLike(true)
@@ -142,13 +136,24 @@ const LikeAndDislike = (props: propsData) => {
     const content = (
         <div className="w-full flex items-center justify-between bg-gray-50 p-2">
             <button onClick={() => {
-                setLike(!like)
+                if (!dislike) {
+                    setLike(!like)
+                } else if (!dislike === like) {
+                    setDislike(!dislike)
+                    setLike(!like)
+                }
+
                 sendLikedItemToUser(props.data)
             }}>
                 <FontAwesomeIcon id="Hello" className={`w-8 h-8 ${like ? 'text-green-400' : 'text-gray-300'}`} icon={faThumbsUp as IconProp} />
             </button>
             <button onClick={() => {
-                setDislike(!dislike)
+                if (!like) {
+                    setDislike(!dislike)
+                } else if (!dislike === like) {
+                    setLike(!like)
+                    setDislike(!dislike)
+                }
                 sendDislikedItemToUser(props.data)
             }}>
                 <FontAwesomeIcon className={`w-8 h-8 ${dislike ? 'text-red-400' : 'text-gray-300'}`} icon={faThumbsDown as IconProp}/>

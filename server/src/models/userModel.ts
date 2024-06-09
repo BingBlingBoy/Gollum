@@ -52,11 +52,37 @@ const userSchema = new Schema<IUser>({
     },
     ratedAlbums: {
         type: Object,
-        default: {}
+        default: {
+            likedAlbums: {
+                "test": {
+                    albumName: "test",
+                    albumImage: "test,"
+                }
+            },
+            dislikedAlbums: {
+                "test": {
+                    albumName: "test",
+                    albumImage: "test,"
+                }
+            }
+        }
     },
     ratedArtists: {
         type: Object,
-        default: {}
+        default: {
+            likedArtists: {
+                "test": {
+                    artistName: "test",
+                    imageURL: "test,"
+                }
+            },
+            dislikedArtists: {
+                "test": {
+                    artistName: "test",
+                    imageURL: "test,"
+                }
+            }
+        },
     },
     likedTracks: {
         type: Object,

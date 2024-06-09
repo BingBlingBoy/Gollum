@@ -210,6 +210,11 @@ interface Image {
 
 const addRatedAlbums = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
     
+    const user = await User.findOne({email: userEmail})
+
+    const likedAlbums = user?.ratedAlbums.likedAlbums || {}
+    const dislikedAlbums = user?.ratedAlbums.dislikedAlbums || {};
+
     const updateQuery: RatedAlbums =  {}
     const albumId = id 
     const albumName = name
@@ -219,11 +224,13 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
         albumImage
     }
         
-    if (type === 'liked') {
+    if (type === 'liked' && !(albumId in dislikedAlbums)) {
         updateQuery[`ratedAlbums.likedAlbums.${albumId}`] = newAlbum;
-    } else if (type === 'disliked') {
+    } else if (type === 'disliked' && !(albumId in likedAlbums)) {
         updateQuery[`ratedAlbums.dislikedAlbums.${albumId}`] = newAlbum;
     }
+
+    
 
 
     await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
