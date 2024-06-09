@@ -191,6 +191,15 @@ interface Album {
     albumImage: string;
 }
 
+interface Artist {
+    artistName: string
+    artistImage: string
+}
+
+interface RatedArtist {
+    [artistId: string]: Artist
+}
+
 interface RatedAlbums {
     [albumId: string] : Album
 }
@@ -221,48 +230,25 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
 }
 
 
-const addLikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
-    const userExists = await User.findOne({email: userEmail})
-
-    if (userExists) {
-        const newAlbum = {
-            name,
-            image
-        }
-
-        userExists.likedArtists = {
-            ...userExists.likedArtists,
-            [href]: newAlbum
-        }
-
-        await userExists.save()
-    } else {
-        throw new Error("Couldn't find user")
+const addRatedArtists = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
+    console.log(id)
+    const updateQuery: RatedArtist =  {}
+    const artistId = id 
+    const artistName = name
+    const artistImage = image.url
+    const newArtist = {
+        artistName,
+        artistImage
     }
-}
-
-const addDislikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
-    const userExists = await User.findOne({email: userEmail}) 
-
-    if (userExists) {
-        const albumId = href 
-        const albumName = name
-        const albumImage = image
-
-        const newAlbum = {
-            albumName,
-            albumImage
-        }
-
-        userExists.dislikedArtists = {
-            ...userExists.dislikedArtists,
-            [albumId]: newAlbum
-        }
-        await userExists.save();
-        // console.log("saved object: ",updatedUser.likedAlbums)
-    } else {
-        throw new Error("Couldn't find user")
+        
+    if (type === 'liked') {
+        updateQuery[`ratedArtists.likedArtists.${artistId}`] = newArtist;
+    } else if (type === 'disliked') {
+        updateQuery[`ratedArtists.dislikedArtists.${artistId}`] = newArtist;
     }
+
+
+    await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
 }
 
 app.post('/user/add/ratedalbum', jsonParser, async (req, res) => {
@@ -280,10 +266,10 @@ app.post('/user/add/ratedalbum', jsonParser, async (req, res) => {
     }
 })
 
-app.post('/user/add/dislikedartist', jsonParser, async (req, res) => {
+app.post('/user/add/ratedartist', jsonParser, async (req, res) => {
     try {
-        const {name, image, href, userEmail} = req.body
-        addDislikedArtist(name, image, href, userEmail)
+        const {name, image, id, userEmail, type} = req.body
+        addRatedArtists(name, image, id, userEmail, type)
         res.status(200).json({
             success: true
         })
@@ -292,21 +278,6 @@ app.post('/user/add/dislikedartist', jsonParser, async (req, res) => {
             success: false 
         })
         throw new Error(`Couldn't add albums: ${error}`)
-    }
-})
-
-app.post('/user/add/likedartist', jsonParser, async(req, res) => {
-    try {
-        const {name, image, href, userEmail} = req.body
-        addLikedArtist(name, image, href, userEmail)
-        res.status(200).json({
-            success: true
-        })
-    } catch (error) {
-        res.status(403).json({
-            success: false 
-        })
-        throw new Error(`Couldn't add artists: ${error}`)
     }
 })
 

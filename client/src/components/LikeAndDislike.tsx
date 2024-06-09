@@ -43,7 +43,6 @@ const LikeAndDislike = (props: propsData) => {
 
     const sendLikedItemToUser = async (_data: Artists|Albums) => {
         try {
-            console.log(_data.id)
             const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                 method: "POST",
                 headers: {
@@ -77,7 +76,7 @@ const LikeAndDislike = (props: propsData) => {
                 body: JSON.stringify({
                     name: _data.name,
                     image: _data.images[0],
-                    href: _data.href,
+                    id: _data.id,
                     userEmail: user?.email,
                     type: "disliked"
                 })
