@@ -251,6 +251,25 @@ const addRatedArtists = async (name: string, image: Image, id: string, userEmail
     await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
 }
 
+const getRatedAlbums = async (userEmail: string) => {
+    try {
+        const user = await User.findOne({email: userEmail})
+    
+        if (user) {
+            const usersLikedAlbums = {
+                ratedAlbums: user.ratedAlbums,
+            };
+
+            console.log(usersLikedAlbums)
+
+            return usersLikedAlbums
+            
+        }
+    } catch (error) {
+        throw new Error(`Couldn't get albums: ${error}`)
+    }
+}
+
 app.post('/user/add/ratedalbum', jsonParser, async (req, res) => {
     try {
         const {name, image, id, userEmail, type} = req.body
@@ -258,6 +277,19 @@ app.post('/user/add/ratedalbum', jsonParser, async (req, res) => {
         res.status(200).json({
             success: true
         })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+app.post('/user/get/ratedalbum', jsonParser, async (req, res) => {
+    try {
+        const {userEmail} = req.body
+        const response = await getRatedAlbums(userEmail)
+        res.json(response)
     } catch (error) {
         res.status(403).json({
             success: false 
