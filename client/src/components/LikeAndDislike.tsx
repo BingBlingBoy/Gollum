@@ -8,6 +8,7 @@ interface Artists {
     name: string
     images: Image[]
     href: string
+    id: string
 }
 
 interface Albums {
@@ -15,6 +16,7 @@ interface Albums {
     images: Image[]
     artists: ArtistFromAlbum[]
     href: string 
+    id: string
 }
 
 interface ArtistFromAlbum {
@@ -41,8 +43,8 @@ const LikeAndDislike = (props: propsData) => {
 
     const sendLikedItemToUser = async (_data: Artists|Albums) => {
         try {
-            console.log(_data.href)
-            const response = await fetch(`http://localhost:3000/user/add/liked${props.type}`, {
+            console.log(_data.id)
+            const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -51,8 +53,9 @@ const LikeAndDislike = (props: propsData) => {
                 body: JSON.stringify({
                     name: _data.name,
                     image: _data.images[0],
-                    href: _data.href,
-                    userEmail: user?.email
+                    id: _data.id,
+                    userEmail: user?.email,
+                    type: "liked"
                 })
             })
             const data = await response.json()
@@ -65,7 +68,7 @@ const LikeAndDislike = (props: propsData) => {
 
     const sendDislikedItemToUser = async (_data: Artists|Albums) => {
         try {
-            const response = await fetch(`http://localhost:3000/user/add/disliked${props.type}`, {
+            const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -75,7 +78,8 @@ const LikeAndDislike = (props: propsData) => {
                     name: _data.name,
                     image: _data.images[0],
                     href: _data.href,
-                    userEmail: user?.email
+                    userEmail: user?.email,
+                    type: "disliked"
                 })
             })
             const data = await response.json()

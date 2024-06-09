@@ -8,6 +8,7 @@ import bodyParser = require("body-parser");
 run()
 dotenv.config();
 
+
 const app = express();
 const port = process.env.PORT 
 
@@ -185,53 +186,40 @@ const getRefreshToken = async (token: string) => {
     }
 }
 
-const addLikedAlbums = async (name: string, image: string, href: string, userEmail: string) => {
-    const userExists = await User.findOne({email: userEmail}) 
-
-    if (userExists) {
-        const albumId = href 
-        const albumName = name
-        const albumImage = image
-
-        const newAlbum = {
-            albumName,
-            albumImage
-        }
-
-        userExists.likedAlbums = {
-            ...userExists.likedAlbums,
-            [albumId]: newAlbum
-        }
-        await userExists.save();
-        // console.log("saved object: ",updatedUser.likedAlbums)
-    } else {
-        throw new Error("Couldn't find user")
-    }
+interface Album {
+    albumName: string;
+    albumImage: string;
 }
 
-const addDislikedAlbums = async (name: string, image: string, href: string, userEmail: string) => {
-    const userExists = await User.findOne({email: userEmail}) 
-
-    if (userExists) {
-        const albumId = href 
-        const albumName = name
-        const albumImage = image
-
-        const newAlbum = {
-            albumName,
-            albumImage
-        }
-
-        userExists.dislikedAlbums = {
-            ...userExists.dislikedAlbums,
-            [albumId]: newAlbum
-        }
-        await userExists.save();
-        // console.log("saved object: ",updatedUser.likedAlbums)
-    } else {
-        throw new Error("Couldn't find user")
-    }
+interface RatedAlbums {
+    [albumId: string] : Album
 }
+
+interface Image {
+    url: string
+}
+
+const addRatedAlbums = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
+    
+    const updateQuery: RatedAlbums =  {}
+    const albumId = id 
+    const albumName = name
+    const albumImage = image.url
+    const newAlbum = {
+        albumName,
+        albumImage
+    }
+        
+    if (type === 'liked') {
+        updateQuery[`ratedAlbums.likedAlbums.${albumId}`] = newAlbum;
+    } else if (type === 'disliked') {
+        updateQuery[`ratedAlbums.dislikedAlbums.${albumId}`] = newAlbum;
+    }
+
+
+    await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+}
+
 
 const addLikedArtist = async (name: string, image: string, href: string, userEmail: string) => {
     const userExists = await User.findOne({email: userEmail})
@@ -246,6 +234,7 @@ const addLikedArtist = async (name: string, image: string, href: string, userEma
             ...userExists.likedArtists,
             [href]: newAlbum
         }
+
         await userExists.save()
     } else {
         throw new Error("Couldn't find user")
@@ -276,10 +265,10 @@ const addDislikedArtist = async (name: string, image: string, href: string, user
     }
 }
 
-app.post('/user/add/likedalbum', jsonParser, async (req, res) => {
+app.post('/user/add/ratedalbum', jsonParser, async (req, res) => {
     try {
-        const {name, image, href, userEmail} = req.body
-        addLikedAlbums(name, image, href, userEmail)
+        const {name, image, id, userEmail, type} = req.body
+        addRatedAlbums(name, image, id, userEmail, type)
         res.status(200).json({
             success: true
         })
@@ -321,20 +310,6 @@ app.post('/user/add/likedartist', jsonParser, async(req, res) => {
     }
 })
 
-app.post('/user/add/dislikedalbum', jsonParser, async(req, res) => {
-    try {
-        const {name, image, href, userEmail} = req.body
-        addDislikedAlbums(name, image, href, userEmail)
-        res.status(200).json({
-            success: true
-        })
-    } catch (error) {
-        res.status(403).json({
-            success: false 
-        })
-        throw new Error(`Couldn't add artists: ${error}`)
-    }
-})
 
 app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
     try {

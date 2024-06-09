@@ -11,6 +11,7 @@ const Search = () => {
 
     interface Artists {
         name: string
+        id: string
         images: Image[]
         external_urls: ExternalURLs
         href: string
@@ -18,6 +19,7 @@ const Search = () => {
 
     interface Albums {
         name: string
+        id: string
         images: Image[]
         external_urls: ExternalURLs
         artists: ArtistFromAlbum[]

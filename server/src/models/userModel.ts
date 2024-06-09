@@ -4,17 +4,20 @@ interface IUser {
     name: string
     email: string
     spotifyAccount: string
-    likedAlbums: LikedAlbums
+    ratedAlbums: {
+        likedAlbums: Albums,
+        dislikedAlbums: Albums
+    }
     likedTracks: LikedTracks
     likedArtists: LikedArtists
-    dislikedAlbums: LikedAlbums
     dislikedArtists: LikedArtists
 }
 
-interface LikedAlbums {
-    albumName: string
-    imageURL: string
-    artistName: string
+interface Albums {
+    [albumId: string] : {
+        albumName: string
+        albumImage: string
+    }
 }
 
 interface LikedTracks {
@@ -42,15 +45,11 @@ const userSchema = new Schema<IUser>({
         type: String,
         unique: true,
     },
-    likedAlbums: {
+    ratedAlbums: {
         type: Object,
         default: {}
     },
     likedArtists: {
-        type: Object,
-        default: {}
-    },
-    dislikedAlbums: {
         type: Object,
         default: {}
     },
