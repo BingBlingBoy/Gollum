@@ -266,6 +266,11 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
 
 
 const addRatedArtists = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
+    const user = await User.findOne({email: userEmail})
+
+    const likedArtists = user?.ratedArtists.likedArtists || {}
+    const dislikedAlbums = user?.ratedArtists.dislikedArtists || {};
+
     const updateQuery: RatedArtist =  {}
     const artistId = id 
     const artistName = name
@@ -274,14 +279,45 @@ const addRatedArtists = async (name: string, image: Image, id: string, userEmail
         artistName,
         artistImage
     }
-        
-    if (type === 'liked') {
-        updateQuery[`ratedArtists.likedArtists.${artistId}`] = newArtist;
-    } else if (type === 'disliked') {
-        updateQuery[`ratedArtists.dislikedArtists.${artistId}`] = newArtist;
-    }
 
-    await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    if (type === 'liked' && (artistId in dislikedAlbums)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedArtists.dislikedArtists.${artistId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
+    
+        updateQuery[`ratedArtists.likedArtists.${artistId}`] = newArtist;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked' && (artistId in likedArtists)) {
+        const removeFromLiked = {
+            $unset: { [`ratedArtists.likedArtists.${artistId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    }
+    else if (type === 'disliked' && (artistId in dislikedAlbums)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedArtists.dislikedArtists.${artistId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
+    } 
+    else if (type === 'disliked' && (artistId in likedArtists)) {
+        const removeFromLiked = {
+            $unset: { [`ratedArtists.likedArtists.${artistId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    
+        updateQuery[`ratedArtists.dislikedArtists.${artistId}`] = newArtist;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked') {
+        updateQuery[`ratedArtists.likedArtists.${artistId}`] = newArtist;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'disliked') {
+        updateQuery[`ratedArtists.dislikedArtists.${artistId}`] = newArtist;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
 }
 
 const getRatedAlbums = async (userEmail: string) => {
@@ -298,6 +334,22 @@ const getRatedAlbums = async (userEmail: string) => {
         }
     } catch (error) {
         throw new Error(`Couldn't get albums: ${error}`)
+    }
+}
+
+const getRatedArtist = async (userEmail: string) => {
+    try {
+        const user = await User.findOne({email: userEmail})
+
+        if (user) {
+            const usersDislikedAlbums = {
+                ratedArtist: user.ratedArtists
+            }
+
+            return usersDislikedAlbums
+        }
+    } catch (error) {
+        throw new Error(`Couldn't get artist: ${error}`)
     }
 }
 
@@ -320,6 +372,19 @@ app.post('/user/get/ratedalbum', jsonParser, async (req, res) => {
     try {
         const {userEmail} = req.body
         const response = await getRatedAlbums(userEmail)
+        res.json(response)
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+app.post('/user/get/ratedartist', jsonParser, async (req, res) => {
+    try {
+        const {userEmail} = req.body
+        const response = await getRatedArtist(userEmail)
         res.json(response)
     } catch (error) {
         res.status(403).json({

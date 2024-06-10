@@ -113,9 +113,34 @@ const LikeAndDislike = (props: propsData) => {
         }
     }
 
+    const gettingLikedArtists = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/user/get/ratedartist', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userEmail: user?.email,
+                })
+                
+            })
+            const data = await response.json()
+            return data
+        } catch (error) {
+            throw new Error(`Couldn't get liked albums: ${error}`)
+        }
+    }
+
     const {data: ratedalbum} = useQuery({
         queryKey: ['GettingLikedAlbums'],
         queryFn: gettingLikedAlbums
+    })
+
+    const {data: ratedartist} = useQuery({
+        queryKey: ['GettingLikedArtists'],
+        queryFn: gettingLikedArtists
     })
 
     useEffect(() => {
@@ -131,7 +156,17 @@ const LikeAndDislike = (props: propsData) => {
                 setDislike(true)
             }
         }
-    }, [ratedalbum])
+
+        if (ratedartist) {
+            if (props.data.id in ratedartist.ratedArtist.likedArtists) {
+                setLike(true)
+            }
+
+            if (props.data.id in ratedartist.ratedArtist.dislikedArtists) {
+                setDislike(true)
+            }
+        }
+    }, [ratedalbum, ratedartist, props.data.id])
 
     const content = (
         <div className="w-full flex items-center justify-between bg-gray-50 p-2">
