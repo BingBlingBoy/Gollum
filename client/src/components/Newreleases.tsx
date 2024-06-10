@@ -65,7 +65,9 @@ const Newreleases = () => {
 
   const content = (
     <>
-      <div className="p-10 flex items-center justify-center bg-best-gray">
+    
+      <div className="p-10 flex flex-col items-center justify-center bg-best-gray">
+        <h1 className="text-5xl p-4 font-bold">New Releases</h1>
         <div className="grid grid-cols-3 gap-x-4">
           {newReleases.map((data: albums, i:number) => (
             <div className="relative flex justify-center flex-col py-4" key={i}>

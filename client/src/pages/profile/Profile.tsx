@@ -105,6 +105,27 @@ const Profile = () => {
         }
     }
 
+    const gettingLikedArtists = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/user/get/ratedartist', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userEmail: user?.email,
+                })
+                
+            })
+            const data = await response.json()
+            return data
+        } catch (error) {
+            throw new Error(`Couldn't get liked albums: ${error}`)
+        }
+        
+    }
+
     const {data: userRecentlyListenedTracks, isFetching: fetchingRecentTracks} = useQuery({
         queryKey: ["recentlyListenedTracks"],
         queryFn: getUserRecentTracks 
@@ -113,6 +134,11 @@ const Profile = () => {
     const {data: userRatedAlbums, isFetching: fetchingRatedAlbums} = useQuery({
         queryKey: ['GettingLikedAlbums'],
         queryFn: gettingLikedAlbums
+    })
+
+    const {data: userRatedArtists, isFetching: fetchingRatedArtists} = useQuery({
+        queryKey: ['GettingLikedArtists'],
+        queryFn: gettingLikedArtists
     })
 
     const {data: spotifyProfileAccount, isFetching: fetchingProfileInfo} = useQuery<SpotifyToken>({
@@ -170,21 +196,45 @@ const Profile = () => {
                                 }
                             </div>
                         </div>
-                        <div className="mx-20">
-                            <h1 className="font-bond text-black text-3xl mb-4">Albums</h1>
+                        <div className="flex flex-col gap-y-10 mx-20">
+                            <div>
+                                <h1 className="font-bond text-black text-3xl mb-4">Liked Albums</h1>
+                                    {
+                                        !fetchingRatedAlbums && (
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                            Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}).filter((album: any) => album.albumName !== "test").slice(0,6).map((data: any, i) => (
+                                                <div key={i} className="flex items-center gap-4">
+                                                    <img className="w-24 h-24" src={data.albumImage} alt="album image" />
+                                                    <p className="font-semibold text-xs">{data.albumName}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        )
+                                    }
+                                <div className="flex justify-end">
+                                    <button className="text-accent font-semibold pr-1" type="submit">More</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="font-bond text-black text-3xl mb-4">Liked Artists</h1>
                                 {
-                                    !fetchingRatedAlbums && (
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {// eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                        Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}).filter((album: any) => album.albumName !== "test").slice(0,6).map((data: any, i) => (
-                                            <div key={i} className="flex items-center gap-4">
-                                                <img className="w-24 h-24" src={data.albumImage} alt="album image" />
-                                                <p className="font-semibold text-xs">{data.albumName}</p>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    !fetchingRatedArtists && (
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                Object.values(userRatedArtists?.ratedArtist?.likedArtists || {}).filter((artist: any) => artist.artistName !== "test").slice(0,6).map((data: any, i) => (
+                                                    <div key={i} className="flex items-center gap-4">
+                                                        <img className="w-24 h-24" src={data.artistImage} alt="album image" />
+                                                        <p className="font-semibold text-xs">{data.artistName}</p>
+                                                    </div>
+                                                ))}
+                                        </div>
                                     )
                                 }
+                                <div className="flex justify-end">
+                                    <button className="text-accent font-semibold pr-1" type="submit">More</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
