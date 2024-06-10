@@ -215,7 +215,7 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
     const likedAlbums = user?.ratedAlbums.likedAlbums || {}
     const dislikedAlbums = user?.ratedAlbums.dislikedAlbums || {};
 
-    const updateQuery: RatedAlbums =  {}
+    let updateQuery: RatedAlbums =  {}
     const albumId = id 
     const albumName = name
     const albumImage = image.url
@@ -224,21 +224,48 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
         albumImage
     }
         
-    if (type === 'liked' && !(albumId in dislikedAlbums)) {
-        updateQuery[`ratedAlbums.likedAlbums.${albumId}`] = newAlbum;
-    } else if (type === 'disliked' && !(albumId in likedAlbums)) {
-        updateQuery[`ratedAlbums.dislikedAlbums.${albumId}`] = newAlbum;
-    }
-
+    if (type === 'liked' && (albumId in dislikedAlbums)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedAlbums.dislikedAlbums.${albumId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
     
-
-
-    await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+        updateQuery[`ratedAlbums.likedAlbums.${albumId}`] = newAlbum;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked' && (albumId in likedAlbums)) {
+        const removeFromLiked = {
+            $unset: { [`ratedAlbums.likedAlbums.${albumId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    } 
+    else if (type === 'disliked' && (albumId in dislikedAlbums)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedAlbums.dislikedAlbums.${albumId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
+    } 
+    else if (type === 'disliked' && (albumId in likedAlbums)) {
+        const removeFromLiked = {
+            $unset: { [`ratedAlbums.likedAlbums.${albumId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    
+        updateQuery[`ratedAlbums.dislikedAlbums.${albumId}`] = newAlbum;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked' && !(albumId in dislikedAlbums)) {
+        updateQuery[`ratedAlbums.likedAlbums.${albumId}`] = newAlbum;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'disliked' && !(albumId in likedAlbums)) {
+        updateQuery[`ratedAlbums.dislikedAlbums.${albumId}`] = newAlbum;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
 }
 
 
 const addRatedArtists = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
-    console.log(id)
     const updateQuery: RatedArtist =  {}
     const artistId = id 
     const artistName = name
@@ -254,7 +281,6 @@ const addRatedArtists = async (name: string, image: Image, id: string, userEmail
         updateQuery[`ratedArtists.dislikedArtists.${artistId}`] = newArtist;
     }
 
-
     await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
 }
 
@@ -266,8 +292,6 @@ const getRatedAlbums = async (userEmail: string) => {
             const usersLikedAlbums = {
                 ratedAlbums: user.ratedAlbums,
             };
-
-            console.log(usersLikedAlbums)
 
             return usersLikedAlbums
             
@@ -325,7 +349,6 @@ app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
     try {
         const token = req.body.refreshToken
         const response = getRefreshToken(token)
-        console.log(response)
     } catch (error) {
         throw new Error(`Couldn't get refresh token: ${error}`)
     }
@@ -334,9 +357,7 @@ app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
 app.post('/spotify/user/recenttracks', jsonParser, async (req, res) => {
     try {
         const token = req.body.spotify_user_token
-        console.log(token)
         const recentTracks = await getUserRecentTracks(token)
-        console.log(recentTracks)
         res.json(recentTracks);
     } catch (error) {
         res.status(500).json({ error: `Failed to retrieve access token ${error}`});
