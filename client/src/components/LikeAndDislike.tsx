@@ -4,12 +4,38 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { useAuth0 } from "@auth0/auth0-react"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
-import { Artists, Albums } from "../models/spotifyTypes"
+// import { Artists, Albums } from "../models/spotifyTypes"
 
+interface BaseItem {
+    name: string;
+    id: string;
+    images: Image[];
+    external_urls: ExternalURLs;
+    href: string;
+}
+
+interface Artists extends BaseItem {}
+
+interface Albums extends BaseItem {
+    artists: Artists[];
+}
+
+interface Tracks extends BaseItem {
+    album: Albums;
+    artists: Artists[];
+}
+
+interface Image {
+    url: string;
+}
+
+interface ExternalURLs {
+    spotify: string;
+}
 
 interface propsData {
-    data: Artists|Albums,
-    type: string
+    data: Artists | Albums | Tracks;
+    type: string;
 }
 
 const LikeAndDislike = (props: propsData) => {
@@ -19,7 +45,7 @@ const LikeAndDislike = (props: propsData) => {
 
     const { user } = useAuth0()
 
-    const sendLikedItemToUser = async (_data: Artists|Albums) => {
+    const sendLikedItemToUser = async (_data: Artists|Albums|Tracks) => {
         try {
             const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                 method: "POST",
@@ -43,7 +69,7 @@ const LikeAndDislike = (props: propsData) => {
         }
     }
 
-    const sendDislikedItemToUser = async (_data: Artists|Albums) => {
+    const sendDislikedItemToUser = async (_data: Artists|Albums|Tracks) => {
         try {
             const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                 method: "POST",
@@ -115,6 +141,7 @@ const LikeAndDislike = (props: propsData) => {
         queryKey: ['GettingLikedArtists'],
         queryFn: gettingLikedArtists
     })
+
 
     useEffect(() => {
         // Try

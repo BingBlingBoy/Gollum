@@ -1,7 +1,7 @@
 import bodyParser from "body-parser"
 import express from "express"
 import User from "../models/userModel"
-import { RatedAlbums, RatedArtist, Image} from "../models/userTypes"
+import { RatedAlbums, RatedArtist, Image, RatedTracks} from "../models/userTypes"
 
 
 const jsonParser = bodyParser.json()
@@ -44,6 +44,22 @@ const getRatedArtist = async (userEmail: string) => {
         if (user) {
             const usersDislikedAlbums = {
                 ratedArtist: user.ratedArtists
+            }
+
+            return usersDislikedAlbums
+        }
+    } catch (error) {
+        throw new Error(`Couldn't get artist: ${error}`)
+    }
+}
+
+const getRatedTrack = async (userEmail: string) => {
+    try {
+        const user = await User.findOne({email: userEmail})
+
+        if (user) {
+            const usersDislikedAlbums = {
+                ratedTrack: user.ratedTracks
             }
 
             return usersDislikedAlbums
@@ -124,6 +140,65 @@ const addRatedArtists = async (name: string, image: Image, id: string, userEmail
         await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
     }
 }
+
+
+const addRatedTracks = async (name: string, image: Image, artist: string, id: string, userEmail: string, type: string) => {
+    const user = await User.findOne({email: userEmail})
+
+    const likedTracks = user?.ratedTracks.likedTracks || {}
+    const dislikedTracks = user?.ratedTracks.dislikedTracks || {};
+
+    const updateQuery: RatedTracks =  {}
+    const trackId = id 
+    const trackName = name
+    const imageURL = image.url
+    const artistName = artist
+    const newTrack = {
+        trackName,
+        imageURL,
+        artistName
+    }
+
+    if (type === 'liked' && (trackId in dislikedTracks)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedTracks.dislikedTracks.${trackId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
+    
+        updateQuery[`ratedTracks.likedTracks.${trackId}`] = newTrack;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked' && (trackId in likedTracks)) {
+        const removeFromLiked = {
+            $unset: { [`ratedTracks.likedTracks.${trackId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    }
+    else if (type === 'disliked' && (trackId in dislikedTracks)) {
+        const removeFromDisliked = {
+            $unset: { [`ratedTracks.dislikedTracks.${trackId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromDisliked);
+    } 
+    else if (type === 'disliked' && (trackId in likedTracks)) {
+        const removeFromLiked = {
+            $unset: { [`ratedTracks.likedTracks.${trackId}`]: 1 }
+        };
+        await User.findOneAndUpdate({ email: userEmail }, removeFromLiked);
+    
+        updateQuery[`ratedTracks.dislikedTracks.${trackId}`] = newTrack;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'liked') {
+        updateQuery[`ratedTracks.likedTracks.${trackId}`] = newTrack;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+    else if (type === 'disliked') {
+        updateQuery[`ratedTracks.dislikedTracks.${trackId}`] = newTrack;
+        await User.findOneAndUpdate({email: userEmail}, updateQuery, {new: true})
+    }
+}
+
 
 const addRatedAlbums = async (name: string, image: Image, id: string, userEmail: string, type: string) => {
     
@@ -223,6 +298,35 @@ router.post('/add/ratedartist', jsonParser, async (req, res) => {
         res.status(200).json({
             success: true
         })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+
+router.post('/add/ratedtrack', jsonParser, async (req, res) => {
+    try {
+        const {name, image, artist, id, userEmail, type} = req.body
+        addRatedTracks(name, image, artist, id, userEmail, type)
+        res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        res.status(403).json({
+            success: false 
+        })
+        throw new Error(`Couldn't add albums: ${error}`)
+    }
+})
+
+router.post('/get/ratedtrack', jsonParser, async (req, res) => {
+    try {
+        const {userEmail} = req.body
+        const response = await getRatedTrack(userEmail)
+        res.json(response)
     } catch (error) {
         res.status(403).json({
             success: false 

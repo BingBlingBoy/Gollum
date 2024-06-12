@@ -11,13 +11,28 @@ const Search = () => {
 
     const [selectedCategory, setSelectedCategory] = useState("Everything")
 
-
-    interface Tracks {
-        album: Artists
-        artists: Artists
-        external_urls: ExternalURLs
-        name: string
+    interface BaseItem {
+        name: string;
+        id: string;
+        images: Image[];
+        external_urls: ExternalURLs;
+        href: string;
     }
+    interface Tracks extends BaseItem {
+        album: Albums;
+        artists: Artists[];
+    }
+
+    interface Image {
+        url: string;
+    }
+
+    // interface Tracks {
+    //     album: Artists
+    //     artists: Artists
+    //     external_urls: ExternalURLs
+    //     name: string
+    // }
 
     interface TracksFromSearch {
         album: Artists
@@ -106,6 +121,7 @@ const Search = () => {
             albumRefetch()
         }
         if (selectedCategory == "Track") {
+            console.log(searchTrackResults.type.tracks.items)
             trackRefetch()
         }
         if (selectedCategory == "Artist") {

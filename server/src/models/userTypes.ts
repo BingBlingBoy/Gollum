@@ -10,6 +10,10 @@ interface RatedAlbums {
     [albumId: string] : Album
 }
 
+interface RatedTracks {
+    [trackId: string] : Track
+}
+
 interface Artist {
     artistName: string
     artistImage: string
@@ -20,8 +24,15 @@ interface Album {
     albumImage: string;
 }
 
+interface Track {
+    trackName: string
+    imageURL: string
+    artistName: string
+}
+
 export type {
     Image,
     RatedAlbums,
-    RatedArtist
+    RatedArtist,
+    RatedTracks
 }
