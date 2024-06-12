@@ -18,7 +18,7 @@ const Index = () => {
 
     const mutation = useMutation({
         mutationFn: async (send: Data) => {
-            await fetch('http://localhost:3000/users/register', {
+            await fetch('http://localhost:3000/user/register', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
