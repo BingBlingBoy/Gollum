@@ -71,6 +71,7 @@ const Navbar = () => {
                                 <li><Link to={`/profile`}>{user?.name}</Link></li> 
                                 <button onClick={() =>{ 
                                     localStorage.clear()
+                                    window.location.reload()
                                     logout({ logoutParams: { returnTo: window.location.origin } })
                                 }}>
                                     Log Out

@@ -38,7 +38,7 @@ const Index = () => {
             }
             mutation.mutate(data)
         }
-    },[isAuthenticated])
+    },[isAuthenticated, mutation, user?.email, user?.name])
 
     const content = (
         <>
