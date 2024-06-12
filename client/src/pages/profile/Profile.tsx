@@ -126,22 +126,22 @@ const Profile = () => {
         
     }
 
-    const {data: userRecentlyListenedTracks, isFetching: fetchingRecentTracks} = useQuery({
+    const {data: userRecentlyListenedTracks, isLoading: loadingRecentlyListenedTracks} = useQuery({
         queryKey: ["recentlyListenedTracks"],
         queryFn: getUserRecentTracks 
     })
 
-    const {data: userRatedAlbums, isFetching: fetchingRatedAlbums, isLoading} = useQuery({
+    const {data: userRatedAlbums, isLoading: loadingRatedAlbums} = useQuery({
         queryKey: ['GettingLikedAlbums'],
         queryFn: gettingLikedAlbums
     })
 
-    const {data: userRatedArtists, isFetching: fetchingRatedArtists} = useQuery({
+    const {data: userRatedArtists, isLoading: loadingRatedArtists } = useQuery({
         queryKey: ['GettingLikedArtists'],
         queryFn: gettingLikedArtists
     })
 
-    const {data: spotifyProfileAccount, isFetching: fetchingProfileInfo} = useQuery<SpotifyToken>({
+    const {data: spotifyProfileAccount, isLoading: loadingSpotifyProfileAccount } = useQuery<SpotifyToken>({
         queryKey: ["spotifyProfile"],
         queryFn: linkSpotifyAccount
     })
@@ -157,7 +157,7 @@ const Profile = () => {
                 <div className="flex items-center justify-center">
                     <div className="grid grid-cols-2 w-full">
                         {
-                            !fetchingProfileInfo &&
+                            !loadingSpotifyProfileAccount &&
                                 <>
                                     <div className="text-white col-span-2 m-20 bg-primary rounded-md grid grid-cols-2 p-10 gap-x-16">
                                         <div className="flex gap-x-10">
@@ -180,7 +180,7 @@ const Profile = () => {
                             <h1 className="font-bond text-black text-3xl mb-4">Recent Tracks</h1>
                             <div className="flex flex-col bg-best-gray w-99">
                                 {
-                                    !fetchingRecentTracks &&
+                                    !loadingRecentlyListenedTracks &&
                                     <>
                                         {userRecentlyListenedTracks.items.map((data: Track, i: number) => (
                                             <div className="flex justify-between my-2 items-center" key={i}>
@@ -200,7 +200,7 @@ const Profile = () => {
                             <div>
                                 <h1 className="font-bond text-black text-3xl mb-4">Liked Albums</h1>
                                     {
-                                        !fetchingRatedAlbums && (
+                                        !loadingRatedAlbums && (
                                         <div className="grid grid-cols-3 gap-2">
                                             {// eslint-disable-next-line @typescript-eslint/no-explicit-any
                                             Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}).filter((album: any) => album.albumName !== "test").slice(0,6).map((data: any, i) => (
@@ -219,7 +219,7 @@ const Profile = () => {
                             <div>
                                 <h1 className="font-bond text-black text-3xl mb-4">Liked Artists</h1>
                                 {
-                                    !fetchingRatedArtists && (
+                                    !loadingRatedArtists && (
                                         <div className="grid grid-cols-3 gap-2">
                                             {// eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                 Object.values(userRatedArtists?.ratedArtist?.likedArtists || {}).filter((artist: any) => artist.artistName !== "test").slice(0,6).map((data: any, i) => (

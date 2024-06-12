@@ -98,22 +98,22 @@ const Search = () => {
         }
     }
 
-    const {data: searchArtistResults, isFetching: fetchingArtists, refetch: artistRefetch} = useQuery({
+    const {data: searchArtistResults, isLoading: loadingArtists, refetch: artistRefetch} = useQuery({
         queryKey: ['aristSearchResults'],
         queryFn: retrieveArtistSearchResult,
     })
 
-    const {data: searchTrackResults, isFetching: fetchingTracks, refetch: trackRefetch} = useQuery({
+    const {data: searchTrackResults, isLoading: loadingTracks, refetch: trackRefetch} = useQuery({
         queryKey: ['trackSearchResults'],
         queryFn: retrieveTrackSearchResult,
     })
 
-    const {data: searchAlbumResults, isFetching: fetchingAlbums, refetch: albumRefetch} = useQuery({
+    const {data: searchAlbumResults, isLoading: loadingAlbums, refetch: albumRefetch} = useQuery({
         queryKey: ['albumSearchResults'],
         queryFn: retrieveAlbumSearchResult,
     })
 
-    const {data: searchResults, isFetching: fetchingEverything, refetch: defaultRefetch} = useQuery({
+    const {data: searchResults, isLoading: loadingEverything, refetch: defaultRefetch} = useQuery({
         queryKey: ['defaultSearchResults'],
         queryFn: retrieveDefaultSearchResult,
     })
@@ -148,7 +148,7 @@ const Search = () => {
                     </ul>
                 </div>
                 {
-                    (selectedCategory == "Everything" && !fetchingEverything) &&
+                    (selectedCategory == "Everything" && !loadingEverything) &&
                         <div className="mt-16">
                             <h1 className="text-3xl mb-2">Artists</h1>
                             <div>
@@ -225,7 +225,7 @@ const Search = () => {
                         </div>
                 }
                 {
-                    (selectedCategory == "Album" && !fetchingAlbums) &&
+                    (selectedCategory == "Album" && !loadingAlbums) &&
                         <div className="mt-16">
                             <h1 className="text-3xl mb-2">Albums</h1>
                             <div>
@@ -250,7 +250,7 @@ const Search = () => {
                         </div>
                 }
                 {
-                    (selectedCategory == "Track" && !fetchingTracks) &&
+                    (selectedCategory == "Track" && !loadingTracks) &&
                         <div className="mt-16">
                             <h1 className="text-3xl mb-2">Tracks</h1>
                             <div>
@@ -275,7 +275,7 @@ const Search = () => {
                         </div>
                 }
                 {
-                    (selectedCategory == "Artist" && !fetchingArtists) &&
+                    (selectedCategory == "Artist" && !loadingArtists) &&
                         <div className="mt-16">
                             <h1 className="text-3xl mb-2">Artists</h1>
                             <div>
