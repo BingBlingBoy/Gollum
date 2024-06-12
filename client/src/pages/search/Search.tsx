@@ -5,32 +5,12 @@ import { useEffect, useState } from "react"
 import profile_page from "../../assets/profile_page.svg"
 import LikeAndDislike from "../../components/LikeAndDislike"
 import { useAuth0 } from "@auth0/auth0-react"
+import { Artists, Albums } from "../../models/spotifyTypes"
 
 const Search = () => {
 
     const [selectedCategory, setSelectedCategory] = useState("Everything")
 
-    interface Artists {
-        name: string
-        id: string
-        images: Image[]
-        external_urls: ExternalURLs
-        href: string
-    }
-
-    interface Albums {
-        name: string
-        id: string
-        images: Image[]
-        external_urls: ExternalURLs
-        href: string 
-        artists: ArtistFromAlbum[]
-    }
-
-    interface ArtistFromAlbum {
-        name: string
-        external_urls: ExternalURLs
-    }
 
     interface Tracks {
         album: Artists
@@ -41,13 +21,9 @@ const Search = () => {
 
     interface TracksFromSearch {
         album: Artists
-        artists: ArtistFromAlbum[] 
+        artists: Artists[] 
         external_urls: ExternalURLs
         name: string
-    }
-
-    interface Image {
-        url: string
     }
 
     interface ExternalURLs {
@@ -185,7 +161,7 @@ const Search = () => {
                                     {
                                         <>
                                             <div className="grid grid-cols-4">
-                                                {searchResults.type.albums.items.map((data:Artists, i: number) => (
+                                                {searchResults.type.albums.items.map((data:Albums, i: number) => (
                                                     <>
                                                         <div className="flex flex-col">
                                                             <div className="relative max-w-[236px] max-h-[236px] bg-gradient-to-t from-gray-300 to-white" key={i}>

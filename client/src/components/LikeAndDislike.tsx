@@ -4,36 +4,8 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { useAuth0 } from "@auth0/auth0-react"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { Artists, Albums } from "../models/spotifyTypes"
 
-
-interface Artists {
-    name: string
-    images: Image[]
-    href: string
-    id: string
-}
-
-interface Albums {
-    name: string
-    images: Image[]
-    artists: ArtistFromAlbum[]
-    external_urls: ExternalURLs
-    href: string 
-    id: string
-}
-
-interface ArtistFromAlbum {
-    name: string
-    external_urls: ExternalURLs
-}
-
-interface Image {
-    url: string
-}
-
-interface ExternalURLs {
-    spotify: string
-}
 
 interface propsData {
     data: Artists|Albums,
