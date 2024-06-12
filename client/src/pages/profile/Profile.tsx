@@ -131,7 +131,7 @@ const Profile = () => {
         queryFn: getUserRecentTracks 
     })
 
-    const {data: userRatedAlbums, isFetching: fetchingRatedAlbums} = useQuery({
+    const {data: userRatedAlbums, isFetching: fetchingRatedAlbums, isLoading} = useQuery({
         queryKey: ['GettingLikedAlbums'],
         queryFn: gettingLikedAlbums
     })

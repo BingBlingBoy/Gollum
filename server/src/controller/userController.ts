@@ -1,31 +1,11 @@
 import bodyParser from "body-parser"
 import express from "express"
 import User from "../models/userModel"
+import { RatedAlbums, RatedArtist, Image} from "../models/userTypes"
+
 
 const jsonParser = bodyParser.json()
 const router = express.Router()
-
-interface Image {
-    url: string
-}
-
-interface RatedArtist {
-    [artistId: string]: Artist
-}
-
-interface RatedAlbums {
-    [albumId: string] : Album
-}
-
-interface Artist {
-    artistName: string
-    artistImage: string
-}
-
-interface Album {
-    albumName: string;
-    albumImage: string;
-}
 
 const registerUser = async (name: string, email: string) => {
     
