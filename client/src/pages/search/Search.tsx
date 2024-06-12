@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import profile_page from "../../assets/profile_page.svg"
 import LikeAndDislike from "../../components/LikeAndDislike"
+import { useAuth0 } from "@auth0/auth0-react"
 
 const Search = () => {
 
@@ -22,6 +23,7 @@ const Search = () => {
         id: string
         images: Image[]
         external_urls: ExternalURLs
+        href: string 
         artists: ArtistFromAlbum[]
     }
 
@@ -53,6 +55,8 @@ const Search = () => {
     }
 
     const { state } = useLocation()
+
+    const { isAuthenticated } = useAuth0()
 
     const retrieveDefaultSearchResult = async () => {
         setSelectedCategory("Everything")
@@ -158,11 +162,13 @@ const Search = () => {
                                             {searchResults.type.artists.items.map((data:Artists, i: number) => (
                                                 <>
                                                     <div className="flex flex-col">
-                                                        <div className="relative max-w-64 max-h-64 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                        <div className="relative max-w-[236px] max-h-[236px] bg-gradient-to-t from-gray-300 to-white" key={i}>
                                                             <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                             <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                         </div>
-                                                        <LikeAndDislike data={data} type={"artist"}/>
+                                                        { isAuthenticated &&
+                                                            <LikeAndDislike data={data} type={"artist"}/>
+                                                        }
                                                     </div>
                                                 </>
                                             ))}    
@@ -182,11 +188,13 @@ const Search = () => {
                                                 {searchResults.type.albums.items.map((data:Artists, i: number) => (
                                                     <>
                                                         <div className="flex flex-col">
-                                                            <div className="relative max-w-64 max-h-64 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                            <div className="relative max-w-[236px] max-h-[236px] bg-gradient-to-t from-gray-300 to-white" key={i}>
                                                                 <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
-                                                            <LikeAndDislike data={data} type={"album"}/>
+                                                            { isAuthenticated &&
+                                                                <LikeAndDislike data={data} type={"album"}/>
+                                                            }
                                                         </div>
                                                     </>
                                                 ))}    
@@ -207,7 +215,7 @@ const Search = () => {
                                                 {searchResults.type.tracks.items.map((data:Tracks, i: number) => (
                                                     <>
                                                         <div className="flex flex-col">
-                                                            <div className="relative max-w-64 max-h-64 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                            <div className="relative max-w-[236px] max-h-[236px] bg-gradient-to-t from-gray-300 to-white" key={i}>
                                                                 <img className="w-full h-full" src={data.album.images.length !== 0 ? data.album.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
@@ -233,13 +241,20 @@ const Search = () => {
                                     <>
                                         <div className="grid grid-cols-2">
                                             {searchAlbumResults.type.albums.items.map((data:Albums, i: number) => (
-                                                <div className="flex flex-row gap-2 py-4">
-                                                    <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
-                                                        <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
+                                                <div className="flex flex-row gap-2 py-4 items-center justify-between">
+                                                    <div className="flex flex-row items-center">
+                                                        <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                            <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
+                                                        </div>
+                                                        <div className="pl-4 max-w-56">
+                                                            <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
+                                                            <p className="text-black text-sm"><a href={data.artists[0].external_urls.spotify}>{data.artists[0].name}</a></p>
+                                                        </div>
                                                     </div>
-                                                    <div className="pl-4">
-                                                        <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
-                                                        <p className="text-black text-sm"><a href={data.artists[0].external_urls.spotify}>{data.artists[0].name}</a></p>
+                                                    <div className="bg-white w-28">
+                                                        { isAuthenticated &&
+                                                            <LikeAndDislike data={data} type={"album"}/>
+                                                        }
                                                     </div>
                                                 </div>
                                             ))}    
@@ -283,15 +298,24 @@ const Search = () => {
                                     <>
                                         <div className="grid grid-cols-2">
                                             {searchArtistResults.type.artists.items.map((data:Artists, i: number) => (
-                                                <div className="flex flex-row gap-2 py-4">
-                                                    <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
-                                                        <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
+                                                <>
+                                                    <div className="flex flex-row gap-4 py-4 items-center justify-between">
+                                                        <div className="flex flex-row items-center">
+                                                            <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                                <img className="w-[80px] h-[80px]" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
+                                                            </div>
+                                                            <div className="pl-4 max-w-56">
+                                                                <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
+                                                                <p className="text-black text-sm"><a href={data.external_urls.spotify}>{data.name}</a></p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="bg-white w-28">
+                                                            { isAuthenticated &&
+                                                                <LikeAndDislike data={data} type={"artists"}/>
+                                                            }
+                                                        </div>
                                                     </div>
-                                                    <div className="pl-4">
-                                                        <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
-                                                        <p className="text-black text-sm"><a href={data.external_urls.spotify}>{data.name}</a></p>
-                                                    </div>
-                                                </div>
+                                                </>
                                             ))}    
                                         </div>
                                     </>

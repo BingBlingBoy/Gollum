@@ -17,6 +17,7 @@ interface Albums {
     name: string
     images: Image[]
     artists: ArtistFromAlbum[]
+    external_urls: ExternalURLs
     href: string 
     id: string
 }
@@ -169,7 +170,8 @@ const LikeAndDislike = (props: propsData) => {
     }, [ratedalbum, ratedartist, props.data.id])
 
     const content = (
-        <div className="w-full flex items-center justify-between bg-gray-50 p-2">
+        <>
+        <div className="w-full flex items-center justify-between bg-white p-2">
             <button onClick={() => {
                 if (!dislike) {
                     setLike(!like)
@@ -194,6 +196,7 @@ const LikeAndDislike = (props: propsData) => {
                 <FontAwesomeIcon className={`w-8 h-8 ${dislike ? 'text-red-400' : 'text-gray-300'}`} icon={faThumbsDown as IconProp}/>
             </button>
         </div>
+        </>
     )
 
     return content
