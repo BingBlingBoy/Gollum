@@ -6,6 +6,7 @@ import profile_page from "../../assets/profile_page.svg"
 import LikeAndDislike from "../../components/LikeAndDislike"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Artists, Albums } from "../../models/spotifyTypes"
+import Footer from "../../components/Footer"
 
 const Search = () => {
 
@@ -322,6 +323,7 @@ const Search = () => {
                         </div>
                 }
             </div>
+            <Footer />
         </>
     )
 

@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar"
 import Newreleases from "../../components/Newreleases"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
+import Footer from "../../components/Footer"
 // import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
@@ -86,6 +87,7 @@ const Index = () => {
                 </p>
             </div>
             <Newreleases />
+            <Footer />
         </>
     )
 

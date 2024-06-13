@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "../../components/Navbar"
 import { useQuery } from "@tanstack/react-query";
+import Footer from "../../components/Footer";
 
 interface SpotifyToken {
     display_name: string,
@@ -282,7 +283,7 @@ const Profile = () => {
                     </div>
                 </div>
             </>
-
+            <Footer />
         </>
     )
 
