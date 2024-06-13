@@ -59,7 +59,7 @@ const Navbar = () => {
     
     const content = (
         <>
-            <nav className="px-6 py-3 bg-primary text-white flex flex-row font-aileron justify-between items-center">
+            <nav className="px-6 py-3 bg-primary text-white flex flex-row font-aileron justify-between items-center sticky top-0 z-50">
                 <h1 className="font-bold text-4xl"><Link to={`/`}>G<span className="text-accent">oll</span>um</Link></h1>
                 <Searchbar />
                 <ul className="flex flex-row gap-x-8 text-lg text-nowrap font-bold">
