@@ -30,7 +30,8 @@ const registerUser = async (name: string, email: string) => {
         success: true 
     }
 
-    if (user) {
+    const onlyOneUser = await User.findOne({email})
+    if (onlyOneUser) {
         return success
     } else {
         throw new Error('Invalid user data')
@@ -258,7 +259,8 @@ const addRatedAlbums = async (name: string, image: Image, id: string, userEmail:
 router.post('/register', jsonParser, async (req, res) => {
     try {
         const {name, email} = req.body
-        await registerUser(name, email)
+        const response = await registerUser(name, email)
+        res.json(response)
     } catch (error) {
         throw new Error(`Could not register new user: ${error}`)
     }
