@@ -34,13 +34,6 @@ const Search = () => {
     //     name: string
     // }
 
-    interface TracksFromSearch {
-        album: Artists
-        artists: Artists[] 
-        external_urls: ExternalURLs
-        name: string
-    }
-
     interface ExternalURLs {
         spotify: string
     }
@@ -168,7 +161,7 @@ const Search = () => {
                                             ))}    
                                         </div>
                                         <div className="flex justify-end">
-                                            <button onClick={retrieveArtistSearchResult} className="text-accent font-semibold pr-1" type="submit">More</button>
+                                            <button onClick={() => {setSelectedCategory("Artist")}} className="text-accent font-semibold pr-1" type="submit">More</button>
                                         </div>
                                     </>
                                 }
@@ -194,7 +187,7 @@ const Search = () => {
                                                 ))}    
                                             </div>
                                             <div className="flex justify-end">
-                                                <button onClick={retrieveAlbumSearchResult} className="text-accent font-semibold pr-1" type="submit">More</button>
+                                                <button onClick={() => {setSelectedCategory("Album")}} className="text-accent font-semibold pr-1" type="submit">More</button>
                                             </div>
                                         </>
                                     }
@@ -213,12 +206,16 @@ const Search = () => {
                                                                 <img className="w-full h-full" src={data.album.images.length !== 0 ? data.album.images[0].url : profile_page} alt="Artist Picture"/>
                                                                 <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                             </div>
+                                                            {
+                                                                isAuthenticated && 
+                                                                    <LikeAndDislike data={data} type={"track"} />
+                                                            }
                                                         </div>
                                                     </>
                                                 ))}    
                                             </div>
                                             <div className="flex justify-end">
-                                                <button onClick={retrieveTrackSearchResult} className="text-accent font-semibold pr-1" type="submit">More</button>
+                                                <button onClick={() => {setSelectedCategory("Track")}} className="text-accent font-semibold pr-1" type="submit">More</button>
                                             </div>
                                         </>
                                     }
@@ -233,7 +230,7 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2">
+                                        <div className="grid grid-cols-2 gap-x-10">
                                             {searchAlbumResults.type.albums.items.map((data:Albums, i: number) => (
                                                 <div className="flex flex-row gap-2 py-4 items-center justify-between">
                                                     <div className="flex flex-row items-center">
@@ -265,15 +262,22 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2">
-                                            {searchTrackResults.type.tracks.items.map((data:TracksFromSearch, i: number) => (
-                                                <div className="flex flex-row gap-2 py-4">
-                                                    <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
-                                                        <img className="w-full h-full" src={data.album.images.length !== 0 ? data.album.images[0].url : profile_page} alt="Artist Picture"/>
+                                        <div className="grid grid-cols-2 gap-x-10">
+                                            {searchTrackResults.type.tracks.items.map((data:Tracks, i: number) => (
+                                                <div className="flex flex-row gap-2 py-4 items-center justify-between">
+                                                    <div className="flex flex-row items-center">
+                                                        <div className="max-w-20 max-h-20 bg-gradient-to-t from-gray-300 to-white" key={i}>
+                                                            <img className="w-full h-full" src={data.album.images.length !== 0 ? data.album.images[0].url : profile_page} alt="Artist Picture"/>
+                                                        </div>
+                                                        <div className="pl-4 max-w-56">
+                                                            <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
+                                                            <p className="text-black text-sm"><a href={data.artists[0].external_urls.spotify}>{data.artists[0].name}</a></p>
+                                                        </div>
                                                     </div>
-                                                    <div className="pl-4">
-                                                        <ol><a className="text-md font-bold text-black" href={data.external_urls.spotify}>{data.name}</a></ol>
-                                                        <p className="text-black text-sm"><a href={data.artists[0].external_urls.spotify}>{data.artists[0].name}</a></p>
+                                                    <div className="bg-white w-28">
+                                                        { isAuthenticated &&
+                                                            <LikeAndDislike data={data} type={"track"}/>
+                                                        }
                                                     </div>
                                                 </div>
                                             ))}    
@@ -290,7 +294,7 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2">
+                                        <div className="grid grid-cols-2 gap-x-10">
                                             {searchArtistResults.type.artists.items.map((data:Artists, i: number) => (
                                                 <>
                                                     <div className="flex flex-row gap-4 py-4 items-center justify-between">
