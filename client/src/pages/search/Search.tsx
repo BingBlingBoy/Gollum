@@ -76,6 +76,7 @@ const Search = () => {
         try {
             const result = await fetch(`http://localhost:3000/spotify/search/${state.query}/track`)
             const data = await result.json()
+            console.log(data)
             return data
         } catch (error) {
             throw new Error("Could not search")
@@ -121,14 +122,15 @@ const Search = () => {
             albumRefetch()
         }
         if (selectedCategory == "Track") {
-            console.log(searchTrackResults.type.tracks.items)
             trackRefetch()
         }
         if (selectedCategory == "Artist") {
             artistRefetch()
         }
-        console.log(selectedCategory)
-    },[defaultRefetch, albumRefetch, trackRefetch, artistRefetch,selectedCategory, state.query])
+
+        state.query
+
+    },[albumRefetch, artistRefetch, defaultRefetch, selectedCategory, state.query, trackRefetch])
 
     const content = (
         <>
