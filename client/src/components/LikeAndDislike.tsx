@@ -4,39 +4,38 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { useAuth0 } from "@auth0/auth0-react"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { Artists, Albums } from "../models/spotifyTypes"
 
-
-interface Artists {
-    name: string
-    images: Image[]
-    href: string
-    id: string
+interface BaseItem {
+    name: string;
+    id: string;
+    images: Image[];
+    external_urls: ExternalURLs;
+    href: string;
 }
 
-interface Albums {
-    name: string
-    images: Image[]
-    artists: ArtistFromAlbum[]
-    href: string 
-    id: string
-}
-
-interface ArtistFromAlbum {
-    name: string
-    external_urls: ExternalURLs
+// interface Artists extends BaseItem {}
+//
+// interface Albums extends BaseItem {
+//     artists: Artists[];
+// }
+//
+interface Tracks extends BaseItem {
+    album: Albums;
+    artists: Artists[];
 }
 
 interface Image {
-    url: string
+    url: string;
 }
 
 interface ExternalURLs {
-    spotify: string
+    spotify: string;
 }
 
 interface propsData {
-    data: Artists|Albums,
-    type: string
+    data: Artists | Albums | Tracks;
+    type: string;
 }
 
 const LikeAndDislike = (props: propsData) => {
@@ -46,50 +45,93 @@ const LikeAndDislike = (props: propsData) => {
 
     const { user } = useAuth0()
 
-    const sendLikedItemToUser = async (_data: Artists|Albums) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sendLikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
-            const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: _data.name,
-                    image: _data.images[0],
-                    id: _data.id,
-                    userEmail: user?.email,
-                    type: "liked"
+            if (props.type == "track") { // for type tracks
+                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: _data.name,
+                        image: _data.album.images[0],
+                        artist: _data.artists[0].name,
+                        id: _data.id,
+                        userEmail: user?.email,
+                        type: "liked"
+                    })
                 })
-            })
-            const data = await response.json()
-            console.log(data)
+                const data = await response.json()
+                console.log(data)
+            } else {
+                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: _data.name,
+                        image: _data.images[0],
+                        id: _data.id,
+                        userEmail: user?.email,
+                        type: "liked"
+                    })
+                })
+                const data = await response.json()
+                console.log(data)
+            }
             
         } catch (error) {
             throw new Error(`Couldn't send liked albums to database: ${error}`)
         }
     }
 
-    const sendDislikedItemToUser = async (_data: Artists|Albums) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sendDislikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
-            const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: _data.name,
-                    image: _data.images[0],
-                    id: _data.id,
-                    userEmail: user?.email,
-                    type: "disliked"
+            if (props.type == "track") { // for type tracks
+                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: _data.name,
+                        image: _data.album.images[0],
+                        artist: _data.artists[0].name,
+                        id: _data.id,
+                        userEmail: user?.email,
+                        type: "disliked"
+                    })
                 })
-            })
-            const data = await response.json()
-            console.log(data)
+                const data = await response.json()
+                console.log(data)
+            } else {
+                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: _data.name,
+                        image: _data.images[0],
+                        id: _data.id,
+                        userEmail: user?.email,
+                        type: "disliked"
+                    })
+                })
+                const data = await response.json()
+                console.log(data)
+            }
+            
         } catch (error) {
-            throw new Error(`Couldn't add disliked albums to database: ${error}`)
+            throw new Error(`Couldn't send liked albums to database: ${error}`)
         }
     }
 
@@ -143,6 +185,7 @@ const LikeAndDislike = (props: propsData) => {
         queryFn: gettingLikedArtists
     })
 
+
     useEffect(() => {
         // Try
         // if (ratedalbum.length != 0) without test objects
@@ -169,7 +212,8 @@ const LikeAndDislike = (props: propsData) => {
     }, [ratedalbum, ratedartist, props.data.id])
 
     const content = (
-        <div className="w-full flex items-center justify-between bg-gray-50 p-2">
+        <>
+        <div className="w-full flex items-center justify-between bg-white p-2">
             <button onClick={() => {
                 if (!dislike) {
                     setLike(!like)
@@ -194,6 +238,7 @@ const LikeAndDislike = (props: propsData) => {
                 <FontAwesomeIcon className={`w-8 h-8 ${dislike ? 'text-red-400' : 'text-gray-300'}`} icon={faThumbsDown as IconProp}/>
             </button>
         </div>
+        </>
     )
 
     return content

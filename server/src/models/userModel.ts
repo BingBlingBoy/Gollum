@@ -12,7 +12,10 @@ interface IUser {
         likedArtists: Artists,
         dislikedArtists: Artists
     }
-    likedTracks: LikedTracks
+    ratedTracks: {
+        likedTracks: Tracks,
+        dislikedTracks: Tracks
+    }
 }
 
 interface Albums {
@@ -29,12 +32,13 @@ interface Artists {
     }
 }
 
-interface LikedTracks {
-    trackName: string
-    imageURL: string
-    artistName: string
+interface Tracks {
+    [trackId: string] : {
+        trackName: string
+        imageURL: string
+        artistName: string
+    }
 }
-
 
 const userSchema = new Schema<IUser>({
     name: {
@@ -84,9 +88,24 @@ const userSchema = new Schema<IUser>({
             }
         },
     },
-    likedTracks: {
+    ratedTracks: {
         type: Object,
-        default: {}
+        default: {
+            likedTracks: {
+                "test": {
+                    artistName: "test",
+                    imageURL: "test",
+                    trackName: "test"
+                }
+            },
+            dislikedTracks: {
+                "test": {
+                    artistName: "test",
+                    imageURL: "test",
+                    trackName: "test"
+                }
+            },
+        }
     },
 
 })

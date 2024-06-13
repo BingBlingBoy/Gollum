@@ -27,6 +27,7 @@ const Newreleases = () => {
     try {
       const response = await fetch('http://localhost:3000/spotify/newReleases')
       const data = await response.json()
+      console.log(data)
       return data.albums.items
     } catch (error) {
       return error
@@ -45,7 +46,7 @@ const Newreleases = () => {
   //   }
   // }
 
-  const {data: newReleases, error, isLoading} = useQuery({
+  const {data: newReleases, error, isLoading } = useQuery({
     queryKey: ['newReleases'],
     queryFn: retrieveNewAlbumReleases
   })

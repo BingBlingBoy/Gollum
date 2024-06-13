@@ -3,6 +3,8 @@ import Navbar from "../../components/Navbar"
 import Newreleases from "../../components/Newreleases"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
+import Footer from "../../components/Footer"
+// import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
 
@@ -16,9 +18,9 @@ const Index = () => {
         isAuthenticated
     } = useAuth0()
 
-    const mutation = useMutation({
-        mutationFn: async (send: Data) => {
-            await fetch('http://localhost:3000/users/register', {
+    const registerUser = async (send: Data) => {
+        try {
+            const response = await fetch('http://localhost:3000/user/register', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -26,9 +28,40 @@ const Index = () => {
                 },
                 body: JSON.stringify(send) 
             })
-            
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            throw new Error(`Couldn't register new user: ${error}`)
         }
+    }
+
+
+    const { mutateAsync: registerUserMutation } = useMutation({
+        mutationFn: registerUser
     })
+
+    // useEffect(() => {
+    //     const registerUser = async (send: Data) => {
+    //         await fetch('http://localhost:3000/user/register', {
+    //             method: "POST",
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(send) 
+    //         })
+    //     } 
+    //
+    //     if (isAuthenticated) {
+    //         const data = {
+    //             name: user?.name,
+    //             email: user?.email
+    //         }
+    //
+    //         registerUser(data)
+    //     }
+    // })
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -36,9 +69,10 @@ const Index = () => {
                 name: user?.name,
                 email: user?.email
             }
-            mutation.mutate(data)
+
+            registerUserMutation(data)
         }
-    },[isAuthenticated])
+    }, [isAuthenticated, registerUserMutation, user?.email, user?.name])
 
     const content = (
         <>
@@ -53,6 +87,7 @@ const Index = () => {
                 </p>
             </div>
             <Newreleases />
+            <Footer />
         </>
     )
 

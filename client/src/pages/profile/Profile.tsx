@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "../../components/Navbar"
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import Footer from "../../components/Footer";
 
 interface SpotifyToken {
     display_name: string,
@@ -123,31 +123,53 @@ const Profile = () => {
         } catch (error) {
             throw new Error(`Couldn't get liked albums: ${error}`)
         }
-        
     }
 
-    const {data: userRecentlyListenedTracks, isFetching: fetchingRecentTracks} = useQuery({
+    const gettingLikedTracks = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/user/get/ratedtrack', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userEmail: user?.email,
+                })
+                
+            })
+            const data = await response.json()
+            console.log(data)
+            return data
+        } catch (error) {
+            throw new Error(`Couldn't get liked albums: ${error}`)
+        }
+
+    }
+
+    const {data: userRecentlyListenedTracks, isLoading: loadingRecentlyListenedTracks} = useQuery({
         queryKey: ["recentlyListenedTracks"],
         queryFn: getUserRecentTracks 
     })
 
-    const {data: userRatedAlbums, isFetching: fetchingRatedAlbums} = useQuery({
+    const {data: userRatedAlbums, isLoading: loadingRatedAlbums} = useQuery({
         queryKey: ['GettingLikedAlbums'],
         queryFn: gettingLikedAlbums
     })
 
-    const {data: userRatedArtists, isFetching: fetchingRatedArtists} = useQuery({
+    const {data: userRatedArtists, isLoading: loadingRatedArtists } = useQuery({
         queryKey: ['GettingLikedArtists'],
         queryFn: gettingLikedArtists
     })
 
-    const {data: spotifyProfileAccount, isFetching: fetchingProfileInfo} = useQuery<SpotifyToken>({
-        queryKey: ["spotifyProfile"],
-        queryFn: linkSpotifyAccount
+    const {data: userRatedTracks, isLoading: loadingRatedTracks } = useQuery({
+        queryKey: ['GettingLikedTracks'],
+        queryFn: gettingLikedTracks
     })
 
-    useEffect(() => {
-        console.log(Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}))
+    const {data: spotifyProfileAccount, isLoading: loadingSpotifyProfileAccount } = useQuery<SpotifyToken>({
+        queryKey: ["spotifyProfile"],
+        queryFn: linkSpotifyAccount
     })
 
     const content = (
@@ -157,7 +179,7 @@ const Profile = () => {
                 <div className="flex items-center justify-center">
                     <div className="grid grid-cols-2 w-full">
                         {
-                            !fetchingProfileInfo &&
+                            !loadingSpotifyProfileAccount &&
                                 <>
                                     <div className="text-white col-span-2 m-20 bg-primary rounded-md grid grid-cols-2 p-10 gap-x-16">
                                         <div className="flex gap-x-10">
@@ -180,7 +202,7 @@ const Profile = () => {
                             <h1 className="font-bond text-black text-3xl mb-4">Recent Tracks</h1>
                             <div className="flex flex-col bg-best-gray w-99">
                                 {
-                                    !fetchingRecentTracks &&
+                                    !loadingRecentlyListenedTracks &&
                                     <>
                                         {userRecentlyListenedTracks.items.map((data: Track, i: number) => (
                                             <div className="flex justify-between my-2 items-center" key={i}>
@@ -200,7 +222,7 @@ const Profile = () => {
                             <div>
                                 <h1 className="font-bond text-black text-3xl mb-4">Liked Albums</h1>
                                     {
-                                        !fetchingRatedAlbums && (
+                                        !loadingRatedAlbums && (
                                         <div className="grid grid-cols-3 gap-2">
                                             {// eslint-disable-next-line @typescript-eslint/no-explicit-any
                                             Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}).filter((album: any) => album.albumName !== "test").slice(0,6).map((data: any, i) => (
@@ -219,7 +241,7 @@ const Profile = () => {
                             <div>
                                 <h1 className="font-bond text-black text-3xl mb-4">Liked Artists</h1>
                                 {
-                                    !fetchingRatedArtists && (
+                                    !loadingRatedArtists && (
                                         <div className="grid grid-cols-3 gap-2">
                                             {// eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                 Object.values(userRatedArtists?.ratedArtist?.likedArtists || {}).filter((artist: any) => artist.artistName !== "test").slice(0,6).map((data: any, i) => (
@@ -235,11 +257,33 @@ const Profile = () => {
                                     <button className="text-accent font-semibold pr-1" type="submit">More</button>
                                 </div>
                             </div>
+                            <div>
+                                <h1 className="font-bond text-black text-3xl mb-4">Liked Tracks</h1>
+                                {
+                                    !loadingRatedTracks && (
+                                        <div className="grid grid-cols-3 gap-4">
+                                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                Object.values(userRatedTracks?.ratedTrack?.likedTracks || {}).filter((track: any) => track.trackName !== "test").slice(0,6).map((data: any, i) => (
+                                                    <div key={i} className="flex items-center gap-4">
+                                                        <img className="w-24 h-24" src={data.imageURL} alt="album image" />
+                                                        <div className="flex flex-col">
+                                                            <p className="font-semibold text-sm">{data.trackName}</p>
+                                                            <p className="text-xs">{data.artistName}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    )
+                                }
+                                <div className="flex justify-end">
+                                    <button className="text-accent font-semibold pr-1" type="submit">More</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </>
-
+            <Footer />
         </>
     )
 
