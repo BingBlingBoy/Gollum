@@ -1,7 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "../../components/Navbar"
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 interface SpotifyToken {
     display_name: string,
@@ -123,7 +122,28 @@ const Profile = () => {
         } catch (error) {
             throw new Error(`Couldn't get liked albums: ${error}`)
         }
-        
+    }
+
+    const gettingLikedTracks = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/user/get/ratedtrack', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userEmail: user?.email,
+                })
+                
+            })
+            const data = await response.json()
+            console.log(data)
+            return data
+        } catch (error) {
+            throw new Error(`Couldn't get liked albums: ${error}`)
+        }
+
     }
 
     const {data: userRecentlyListenedTracks, isLoading: loadingRecentlyListenedTracks} = useQuery({
@@ -141,13 +161,14 @@ const Profile = () => {
         queryFn: gettingLikedArtists
     })
 
+    const {data: userRatedTracks, isLoading: loadingRatedTracks } = useQuery({
+        queryKey: ['GettingLikedTracks'],
+        queryFn: gettingLikedTracks
+    })
+
     const {data: spotifyProfileAccount, isLoading: loadingSpotifyProfileAccount } = useQuery<SpotifyToken>({
         queryKey: ["spotifyProfile"],
         queryFn: linkSpotifyAccount
-    })
-
-    useEffect(() => {
-        console.log(Object.values(userRatedAlbums?.ratedAlbums?.likedAlbums || {}))
     })
 
     const content = (
@@ -226,6 +247,28 @@ const Profile = () => {
                                                     <div key={i} className="flex items-center gap-4">
                                                         <img className="w-24 h-24" src={data.artistImage} alt="album image" />
                                                         <p className="font-semibold text-xs">{data.artistName}</p>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    )
+                                }
+                                <div className="flex justify-end">
+                                    <button className="text-accent font-semibold pr-1" type="submit">More</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="font-bond text-black text-3xl mb-4">Liked Tracks</h1>
+                                {
+                                    !loadingRatedTracks && (
+                                        <div className="grid grid-cols-3 gap-4">
+                                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                Object.values(userRatedTracks?.ratedTrack?.likedTracks || {}).filter((track: any) => track.trackName !== "test").slice(0,6).map((data: any, i) => (
+                                                    <div key={i} className="flex items-center gap-4">
+                                                        <img className="w-24 h-24" src={data.imageURL} alt="album image" />
+                                                        <div className="flex flex-col">
+                                                            <p className="font-semibold text-sm">{data.trackName}</p>
+                                                            <p className="text-xs">{data.artistName}</p>
+                                                        </div>
                                                     </div>
                                                 ))}
                                         </div>

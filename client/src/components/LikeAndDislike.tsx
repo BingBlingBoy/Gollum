@@ -48,7 +48,7 @@ const LikeAndDislike = (props: propsData) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sendLikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
-            if (props.type) { // for type tracks
+            if (props.type == "track") { // for type tracks
                 const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
@@ -93,7 +93,7 @@ const LikeAndDislike = (props: propsData) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sendDislikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
-            if (props.type) { // for type tracks
+            if (props.type == "track") { // for type tracks
                 const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
