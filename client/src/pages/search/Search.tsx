@@ -7,6 +7,7 @@ import LikeAndDislike from "../../components/LikeAndDislike"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Artists, Albums } from "../../models/spotifyTypes"
 import Footer from "../../components/Footer"
+// import Playbutton from "../../components/Playbutton"
 
 const Search = () => {
 
@@ -70,7 +71,6 @@ const Search = () => {
         try {
             const result = await fetch(`http://localhost:3000/spotify/search/${state.query}/track`)
             const data = await result.json()
-            console.log(data)
             return data
         } catch (error) {
             throw new Error("Could not search")
@@ -87,6 +87,16 @@ const Search = () => {
             throw new Error("Could not search")
         }
     }
+
+    // const retrieveSpotifyToken = async () => {
+    //     try {
+    //         const response = await fetch("http://localhost:3000/spotify/getToken")
+    //         const data = await response.json()
+    //         return data
+    //     } catch (error) {
+    //         throw new Error(`Couldn't get token: ${error}`)
+    //     }
+    // }
 
     const {data: searchArtistResults, isLoading: loadingArtists, refetch: artistRefetch} = useQuery({
         queryKey: ['aristSearchResults'],
@@ -107,6 +117,11 @@ const Search = () => {
         queryKey: ['defaultSearchResults'],
         queryFn: retrieveDefaultSearchResult,
     })
+
+    // const {data: spotifyToken, isFetched} = useQuery({
+    //     queryKey: ['gettingSpotifyToken'],
+    //     queryFn: retrieveSpotifyToken
+    // })
 
     useEffect(() => {
         if (selectedCategory == "Everything") {
