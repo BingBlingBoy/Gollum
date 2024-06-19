@@ -1,16 +1,19 @@
+import { IconProp } from "@fortawesome/fontawesome-svg-core"
+import { faBars, faX } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Searchbar from "./Searchbar"
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
-import HamburgerMenu from "./HamburgerMenu";
+import { useAuth0 } from "@auth0/auth0-react"
 
-interface Map {
-    [key: string]: string | undefined
-}
-
-const Navbar = () => {
+const HamburgerMenu = () => {
+    const [openNav, setOpenNav] = useState(false)
 
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+    
+    interface Map {
+        [key: string]: string | undefined
+    }
 
     const CLIENT_ID = "1466b5977d204641aa0538b887b91e9e";
     const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
@@ -56,17 +59,30 @@ const Navbar = () => {
             }
         }
     },[])
+
+
     
     const content = (
-        <>
-            <nav className="px-6 py-3 bg-primary text-white flex flex-row font-aileron justify-between items-center sticky top-0 z-50">
-                <div className="lg:hidden w-full">
-                    <HamburgerMenu />
-                </div>
-                <div className="hidden lg:flex items-center justify-between w-full">
-                    <h1 className="font-bold text-4xl transition delay-75 hover:scale-110"><Link to={`/`}>G<span className="text-accent">oll</span>um</Link></h1>
-                    <Searchbar />
-                    <ul className="flex flex-row gap-x-8 text-lg text-nowrap font-bold">
+        <>  
+            {
+                !openNav &&
+                    <>
+                        <div className="flex justify-between items-center">
+                            <h1 className="font-bold text-4xl transition delay-75 hover:scale-110"><Link to={`/`}>G<span className="text-accent">oll</span>um</Link></h1>
+                            <button className="pt-1" onClick={() => (setOpenNav(!openNav))}>
+                                <FontAwesomeIcon className="w-8 h-8 text-white" icon={faBars as IconProp} />
+                            </button>
+                        </div>
+                    </>
+            }
+            <div className={openNav ? "w-full h-screen bg-primary relative" : "hidden"}>
+                <button className="absolute top-1 right-0" onClick={() => (setOpenNav(!openNav))}>
+                    <FontAwesomeIcon className="w-8 h-8 text-white" icon={faX as IconProp} />
+                </button>
+
+                <div className="flex flex-col items-center justify-center w-full h-full">
+                    <ul className="flex flex-col gap-y-8 items-center text-lg text-nowrap font-bold">
+                        <Searchbar />
                         <li className="transition delay-75 hover:scale-125 hover:text-accent"><Link to={`/`}>Home</Link></li>
                         {(localStorage.getItem("accessToken")) ?
                             <>
@@ -90,10 +106,11 @@ const Navbar = () => {
                         }
                     </ul>
                 </div>
-            </nav>
+            </div>
         </>
     )
+    
     return content
 }
 
-export default Navbar
+export default HamburgerMenu
