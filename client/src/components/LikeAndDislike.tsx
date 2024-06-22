@@ -53,7 +53,8 @@ const LikeAndDislike = (props: propsData) => {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     },
                     body: JSON.stringify({
                         name: _data.name,
@@ -71,7 +72,8 @@ const LikeAndDislike = (props: propsData) => {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     },
                     body: JSON.stringify({
                         name: _data.name,
