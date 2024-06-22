@@ -58,7 +58,7 @@ const Search = () => {
     const retrieveAlbumSearchResult = async () => {
         setSelectedCategory("Album")
         try {
-            const result = await fetch(`https://gollum-0q6i.onrender.com/search/${state.query}/album`)
+            const result = await fetch(`https://gollum-0q6i.onrender.com/spotify/search/${state.query}/album`)
             const data = await result.json()
             return data
         } catch (error) {
