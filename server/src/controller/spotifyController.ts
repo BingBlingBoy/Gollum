@@ -197,7 +197,7 @@ router.get('/login', (req, res) => {
       response_type: "code",
       client_id: clientId,
       scope: scope,
-      redirect_uri: "http://localhost:5173/profile",
+      redirect_uri: "https://gollum-kappa.vercel.app/",
       state: state
     })
   
