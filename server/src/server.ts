@@ -13,7 +13,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT 
 
-app.use(cors())
+app.use(cors({
+    origin: [
+        "https://gollum-kappa.vercel.app/"
+    ]
+}))
 const jsonParser = bodyParser.json()
  
 const clientId = process.env.CLIENT_ID
