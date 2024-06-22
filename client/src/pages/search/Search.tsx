@@ -161,13 +161,13 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-4">
+                                        <div className="grid grid-cols-2 lg:grid-cols-4">
                                             {searchResults.type.artists.items.map((data:Artists, i: number) => (
                                                 <>
                                                     <div className="flex flex-col">
                                                         <div className="relative max-w-[236px] max-h-[236px] bg-gradient-to-t from-gray-300 to-white" key={i}>
                                                             <img className="w-full h-full" src={data.images.length !== 0 ? data.images[0].url : profile_page} alt="Artist Picture"/>
-                                                            <ol className="absolute bottom-2 left-2"><a className="text-xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
+                                                            <ol className="absolute bottom-2 left-2"><a className="text-lg font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" href={data.external_urls.spotify}>{data.name}</a></ol>
                                                         </div>
                                                         { isAuthenticated &&
                                                             <LikeAndDislike data={data} type={"artist"}/>
@@ -187,7 +187,7 @@ const Search = () => {
                                 <div>
                                     {
                                         <>
-                                            <div className="grid grid-cols-4">
+                                            <div className="grid grid-cols-2 lg:grid-cols-4">
                                                 {searchResults.type.albums.items.map((data:Albums, i: number) => (
                                                     <>
                                                         <div className="flex flex-col">
@@ -214,7 +214,7 @@ const Search = () => {
                                 <div>
                                     {
                                         <>
-                                            <div className="grid grid-cols-4">
+                                            <div className="grid grid-cols-2 lg:grid-cols-4">
                                                 {searchResults.type.tracks.items.map((data:Tracks, i: number) => (
                                                     <>
                                                         <div className="flex flex-col">
@@ -246,7 +246,7 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2 gap-x-10">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
                                             {searchAlbumResults.type.albums.items.map((data:Albums, i: number) => (
                                                 <div className="flex flex-row gap-2 py-4 items-center justify-between">
                                                     <div className="flex flex-row items-center">
@@ -278,7 +278,7 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2 gap-x-10">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
                                             {searchTrackResults.type.tracks.items.map((data:Tracks, i: number) => (
                                                 <div className="flex flex-row gap-2 py-4 items-center justify-between">
                                                     <div className="flex flex-row items-center">
@@ -310,7 +310,7 @@ const Search = () => {
                             <div>
                                 {
                                     <>
-                                        <div className="grid grid-cols-2 gap-x-10">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
                                             {searchArtistResults.type.artists.items.map((data:Artists, i: number) => (
                                                 <>
                                                     <div className="flex flex-row gap-4 py-4 items-center justify-between">
