@@ -14,7 +14,7 @@ const Navbar = () => {
 
     const CLIENT_ID = "1466b5977d204641aa0538b887b91e9e";
     const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-    const REDIRECT_URL_AFTER_LOGIN = "https://gollum-0q6i.onrender.com/";
+    const REDIRECT_URL_AFTER_LOGIN = "https://gollum-kappa.vercel.app/";
     const SPACE_DELIMITER = "%20";
     const SCOPES = [
       "user-read-currently-playing",
