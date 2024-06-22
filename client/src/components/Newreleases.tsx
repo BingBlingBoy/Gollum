@@ -6,7 +6,7 @@ const Newreleases = () => {
 
   const retrieveNewAlbumReleases = async () => {
     try {
-      const response = await fetch('http://localhost:3000/spotify/newReleases')
+      const response = await fetch('https://gollum-0q6i.onrender.com/spotify/newReleases')
       const data = await response.json()
       return data.albums.items
     } catch (error) {

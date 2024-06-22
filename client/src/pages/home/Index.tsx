@@ -20,7 +20,7 @@ const Index = () => {
 
     const registerUser = async (send: Data) => {
         try {
-            const response = await fetch('http://localhost:3000/user/register', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/register', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

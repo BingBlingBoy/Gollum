@@ -46,7 +46,7 @@ const Profile = () => {
     const getUserRecentTracks = async () => {
         try {
             const aT = localStorage.getItem("accessToken")
-            const response = await fetch(`http://localhost:3000/spotify/user/recenttracks`, {
+            const response = await fetch(`https://gollum-0q6i.onrender.com/spotify/user/recenttracks`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -67,7 +67,7 @@ const Profile = () => {
     const linkSpotifyAccount = async () => {
         try {
             const aT = localStorage.getItem("accessToken")
-            const spotifyAccount = await fetch(`http://localhost:3000/spotify/getUserProfile/`, {
+            const spotifyAccount = await fetch(`https://gollum-0q6i.onrender.com/spotify/getUserProfile/`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -87,7 +87,7 @@ const Profile = () => {
     
     const gettingLikedAlbums = async () => {
         try {
-            const response = await fetch('http://localhost:3000/user/get/ratedalbum', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/get/ratedalbum', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -107,7 +107,7 @@ const Profile = () => {
 
     const gettingLikedArtists = async () => {
         try {
-            const response = await fetch('http://localhost:3000/user/get/ratedartist', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedartist', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -127,7 +127,7 @@ const Profile = () => {
 
     const gettingLikedTracks = async () => {
         try {
-            const response = await fetch('http://localhost:3000/user/get/ratedtrack', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedtrack', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

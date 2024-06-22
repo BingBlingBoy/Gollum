@@ -49,7 +49,7 @@ const LikeAndDislike = (props: propsData) => {
     const sendLikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
             if (props.type == "track") { // for type tracks
-                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                const response = await fetch(`https://gollum-0q6i.onrender.com/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -67,7 +67,7 @@ const LikeAndDislike = (props: propsData) => {
                 const data = await response.json()
                 console.log(data)
             } else {
-                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                const response = await fetch(`https://gollum-0q6i.onrender.com/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -94,7 +94,7 @@ const LikeAndDislike = (props: propsData) => {
     const sendDislikedItemToUser = async (_data: Artists|Albums|any) => {
         try {
             if (props.type == "track") { // for type tracks
-                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                const response = await fetch(`https://gollum-0q6i.onrender.com/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -112,7 +112,7 @@ const LikeAndDislike = (props: propsData) => {
                 const data = await response.json()
                 console.log(data)
             } else {
-                const response = await fetch(`http://localhost:3000/user/add/rated${props.type}`, {
+                const response = await fetch(`https://gollum-0q6i.onrender.com/user/add/rated${props.type}`, {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -137,7 +137,7 @@ const LikeAndDislike = (props: propsData) => {
 
     const gettingLikedAlbums = async () => {
         try {
-            const response = await fetch('http://localhost:3000/user/get/ratedalbum', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedalbum', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -157,7 +157,7 @@ const LikeAndDislike = (props: propsData) => {
 
     const gettingLikedArtists = async () => {
         try {
-            const response = await fetch('http://localhost:3000/user/get/ratedartist', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedartist', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
