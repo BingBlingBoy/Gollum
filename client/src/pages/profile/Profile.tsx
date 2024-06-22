@@ -87,7 +87,7 @@ const Profile = () => {
     
     const gettingLikedAlbums = async () => {
         try {
-            const response = await fetch('https://gollum-0q6i.onrender.com/get/ratedalbum', {
+            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedalbum', {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
