@@ -15,7 +15,8 @@ const port = process.env.PORT
 
 app.use(cors({
     origin: [
-        "https://gollum-kappa.vercel.app/"
+        "https://gollum-kappa.vercel.app/",
+        "https://gollum-0q6i.onrender.com"
     ]
 }))
 const jsonParser = bodyParser.json()
