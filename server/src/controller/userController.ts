@@ -260,6 +260,9 @@ router.post('/register', jsonParser, async (req, res) => {
     try {
         const {name, email} = req.body
         const response = await registerUser(name, email)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(response)
     } catch (error) {
         throw new Error(`Could not register new user: ${error}`)
@@ -271,6 +274,9 @@ router.post('/get/ratedalbum', jsonParser, async (req, res) => {
     try {
         const {userEmail} = req.body
         const response = await getRatedAlbums(userEmail)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(response)
     } catch (error) {
         res.status(403).json({
@@ -284,6 +290,9 @@ router.post('/get/ratedartist', jsonParser, async (req, res) => {
     try {
         const {userEmail} = req.body
         const response = await getRatedArtist(userEmail)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(response)
     } catch (error) {
         res.status(403).json({
@@ -297,6 +306,9 @@ router.post('/add/ratedartist', jsonParser, async (req, res) => {
     try {
         const {name, image, id, userEmail, type} = req.body
         addRatedArtists(name, image, id, userEmail, type)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.status(200).json({
             success: true
         })
@@ -313,6 +325,9 @@ router.post('/add/ratedtrack', jsonParser, async (req, res) => {
     try {
         const {name, image, artist, id, userEmail, type} = req.body
         addRatedTracks(name, image, artist, id, userEmail, type)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.status(200).json({
             success: true
         })
@@ -328,6 +343,9 @@ router.post('/get/ratedtrack', jsonParser, async (req, res) => {
     try {
         const {userEmail} = req.body
         const response = await getRatedTrack(userEmail)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(response)
     } catch (error) {
         res.status(403).json({
@@ -341,6 +359,9 @@ router.post('/add/ratedalbum', jsonParser, async (req, res) => {
     try {
         const {name, image, id, userEmail, type} = req.body
         addRatedAlbums(name, image, id, userEmail, type)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.status(200).json({
             success: true
         })
