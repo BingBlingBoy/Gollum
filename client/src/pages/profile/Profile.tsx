@@ -51,7 +51,9 @@ const Profile = () => {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, GET',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
                 },
                 body: JSON.stringify({
                     spotify_user_token: aT
@@ -74,7 +76,7 @@ const Profile = () => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                    'Access-Control-Allow-Methods': 'POST, GET',
                     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
                 },
                 body: JSON.stringify({
@@ -97,7 +99,7 @@ const Profile = () => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                    'Access-Control-Allow-Methods': 'POST, GET',
                     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
                 },
                 body: JSON.stringify({
