@@ -104,6 +104,9 @@ const searchNoType = async (token: string, query: string) => {
 router.get('/getToken', async (req, res) => {
     try {
         const token = await getSpotifyAccessToken();
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json({
             access_token: token.access_token,
             expires_in: token.expires_in
@@ -122,6 +125,9 @@ router.get('/newReleases', async (req, res) => {
         });
 
         const data = await result.json()
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json({
             albums: data.albums
         })
@@ -137,6 +143,9 @@ router.get('/search/:query/:type', async (req, res) => {
 
         const token = await getSpotifyAccessToken()
         const searchResults = await search(token.access_token, type, query);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json({
             type: searchResults
         })
@@ -151,6 +160,9 @@ router.get('/search/:query', async (req, res) => {
 
         const token = await getSpotifyAccessToken()
         const searchResultsNoType = await searchNoType(token.access_token, query);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json({
             type: searchResultsNoType
         })
@@ -164,6 +176,9 @@ router.post('/getUserProfile/', jsonParser, async (req, res) => {
     try {
         const token = req.body.accessToken
         const spotifyProfile = await getCurrentUsersProfile(token)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(spotifyProfile);
     } catch (error) {
         res.status(500).json({ error: `Failed to retrieve access token ${error}`});
@@ -174,6 +189,9 @@ router.post('/user/recenttracks', jsonParser, async (req, res) => {
     try {
         const token = req.body.spotify_user_token
         const recentTracks = await getUserRecentTracks(token)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
         res.json(recentTracks);
     } catch (error) {
         res.status(500).json({ error: `Failed to retrieve access token ${error}`});
@@ -197,7 +215,7 @@ router.get('/login', (req, res) => {
       response_type: "code",
       client_id: clientId,
       scope: scope,
-      redirect_uri: "http://localhost:5173/profile",
+      redirect_uri: "https://gollum-kappa.vercel.app/",
       state: state
     })
   

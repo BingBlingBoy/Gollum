@@ -15,6 +15,7 @@ const port = process.env.PORT
 
 app.use(cors())
 const jsonParser = bodyParser.json()
+app.use(express.urlencoded({ extended: true }));
  
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
