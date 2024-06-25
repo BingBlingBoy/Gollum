@@ -4,14 +4,14 @@ import Newreleases from "../../components/Newreleases"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import Footer from "../../components/Footer"
+import { Data } from "../../models/userTypes"
 // import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
 
-    interface Data {
-        name?: string
-        email?: string
-    }
+    // const URL = 'https://gollum-0q6i.onrender.com'
+    const URL = 'http://localhost:3000'
+
 
     const {
         user,
@@ -20,7 +20,7 @@ const Index = () => {
 
     const registerUser = async (send: Data) => {
         try {
-            const response = await fetch('https://gollum-0q6i.onrender.com/user/register', {
+            const response = await fetch(`${URL}/user/register`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -43,28 +43,6 @@ const Index = () => {
     const { mutateAsync: registerUserMutation } = useMutation({
         mutationFn: registerUser
     })
-
-    // useEffect(() => {
-    //     const registerUser = async (send: Data) => {
-    //         await fetch('http://localhost:3000/user/register', {
-    //             method: "POST",
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(send) 
-    //         })
-    //     } 
-    //
-    //     if (isAuthenticated) {
-    //         const data = {
-    //             name: user?.name,
-    //             email: user?.email
-    //         }
-    //
-    //         registerUser(data)
-    //     }
-    // })
 
     useEffect(() => {
         if (isAuthenticated) {

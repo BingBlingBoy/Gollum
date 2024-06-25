@@ -198,6 +198,8 @@ router.post('/user/recenttracks', jsonParser, async (req, res) => {
     }
 });
 
+// const URL = 'https://gollum-kappa.vercel.app/'
+const URL = 'http://localhost:5173/'
 
 router.get('/login', (req, res) => {
 
@@ -215,7 +217,7 @@ router.get('/login', (req, res) => {
       response_type: "code",
       client_id: clientId,
       scope: scope,
-      redirect_uri: "https://gollum-kappa.vercel.app/",
+      redirect_uri: URL,
       state: state
     })
   

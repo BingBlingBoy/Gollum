@@ -12,9 +12,12 @@ const Navbar = () => {
 
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
+    // const URL = 'https://gollum-kappa.vercel.app/'
+    const URL = 'http://localhost:5173/'
+
     const CLIENT_ID = "1466b5977d204641aa0538b887b91e9e";
     const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-    const REDIRECT_URL_AFTER_LOGIN = "https://gollum-kappa.vercel.app/";
+    const REDIRECT_URL_AFTER_LOGIN = URL;
     const SPACE_DELIMITER = "%20";
     const SCOPES = [
       "user-read-currently-playing",

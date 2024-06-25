@@ -10,6 +10,8 @@ import Footer from "../../components/Footer"
 // import Playbutton from "../../components/Playbutton"
 
 const Search = () => {
+    // const URL = 'https://gollum-0q6i.onrender.com'
+    const URL = 'http://localhost:3000'
 
     const [selectedCategory, setSelectedCategory] = useState("Everything")
 
@@ -47,7 +49,7 @@ const Search = () => {
     const retrieveDefaultSearchResult = async () => {
         setSelectedCategory("Everything")
         try {
-            const result = await fetch(`https://gollum-0q6i.onrender.com/spotify/search/${state.query}`)
+            const result = await fetch(`${URL}/spotify/search/${state.query}`)
             const data = await result.json()
             return data
         } catch (error) {
@@ -58,7 +60,7 @@ const Search = () => {
     const retrieveAlbumSearchResult = async () => {
         setSelectedCategory("Album")
         try {
-            const result = await fetch(`https://gollum-0q6i.onrender.com/spotify/search/${state.query}/album`)
+            const result = await fetch(`${URL}/spotify/search/${state.query}/album`)
             const data = await result.json()
             return data
         } catch (error) {
@@ -69,7 +71,7 @@ const Search = () => {
     const retrieveTrackSearchResult = async () => {
         setSelectedCategory("Track")
         try {
-            const result = await fetch(`https://gollum-0q6i.onrender.com/spotify/search/${state.query}/track`)
+            const result = await fetch(`${URL}/spotify/search/${state.query}/track`)
             const data = await result.json()
             return data
         } catch (error) {
@@ -80,7 +82,7 @@ const Search = () => {
     const retrieveArtistSearchResult = async () => {
         setSelectedCategory("Artist")
         try {
-            const result = await fetch(`https://gollum-0q6i.onrender.com/spotify/search/${state.query}/artist`)
+            const result = await fetch(`${URL}/spotify/search/${state.query}/artist`)
             const data = await result.json()
             return data
         } catch (error) {

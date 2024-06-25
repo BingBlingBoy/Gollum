@@ -2,17 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "../../components/Navbar"
 import { useQuery } from "@tanstack/react-query";
 import Footer from "../../components/Footer";
-
-interface SpotifyToken {
-    display_name: string,
-    images: Image[]
-}
-
-interface Artists {
-    name: string
-    images: Image[]
-    external_urls: ExternalURLs
-}
+import { Artists, SpotifyToken } from "../../models/spotifyTypes";
+import { getUserRecentTracks, linkSpotifyAccount } from "../../api/spotify/SpotifyAPI";
 
 interface Track {
     track: TracksFromSearch;
@@ -20,18 +11,9 @@ interface Track {
 
 interface TracksFromSearch {
     album: Artists
-    artists: ArtistFromAlbum[] 
+    artists: Artists[] 
     external_urls: ExternalURLs
     name: string
-}
-
-interface ArtistFromAlbum {
-    name: string
-    external_urls: ExternalURLs
-}
-
-interface Image {
-    url: string
 }
 
 interface ExternalURLs {
@@ -43,52 +25,6 @@ const Profile = () => {
 
     const { user } = useAuth0()
 
-    const getUserRecentTracks = async () => {
-        try {
-            const aT = localStorage.getItem("accessToken")
-            const response = await fetch(`https://gollum-0q6i.onrender.com/spotify/user/recenttracks`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    spotify_user_token: aT
-                })
-            })
-            const data = await response.json()
-            return data    
-        } catch (error) {
-            throw new Error(`Couldn't get users recent tracks: ${error}`)    
-        }    
-    } 
-
-
-    const linkSpotifyAccount = async () => {
-        try {
-            const aT = localStorage.getItem("accessToken")
-            const spotifyAccount = await fetch(`https://gollum-0q6i.onrender.com/spotify/getUserProfile/`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, GET',
-                    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-                },
-                body: JSON.stringify({
-                    accessToken: aT
-                })
-            })
-
-            const data = await spotifyAccount.json()
-            return data    
-        } catch (error) {
-            throw new Error("Couldn't get spotify account")
-        }
-    }
-    
     const gettingLikedAlbums = async () => {
         try {
             const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedalbum', {

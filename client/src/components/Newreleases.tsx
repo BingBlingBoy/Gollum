@@ -1,18 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { Albums, Artists } from "../models/spotifyTypes"
+import { retrieveNewAlbumReleases } from "../api/spotify/SpotifyAPI"
 
 const Newreleases = () => {
-
-
-  const retrieveNewAlbumReleases = async () => {
-    try {
-      const response = await fetch('https://gollum-0q6i.onrender.com/spotify/newReleases')
-      const data = await response.json()
-      return data.albums.items
-    } catch (error) {
-      return error
-    }
-  }
 
   const {data: newReleases, error, isLoading } = useQuery({
     queryKey: ['newReleases'],

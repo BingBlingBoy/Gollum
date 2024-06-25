@@ -23,7 +23,25 @@ interface ExternalURLs {
     spotify: string
 }
 
+interface SpotifyToken {
+    display_name: string,
+    images: Image[]
+}
+
+interface Track {
+    track: TracksFromSearch;
+}
+
+interface TracksFromSearch {
+    album: Albums 
+    artists: Artists[] 
+    external_urls: ExternalURLs
+    name: string
+}
+
 export type {
     Albums,
-    Artists 
+    Artists,
+    SpotifyToken,
+    Track
 }
