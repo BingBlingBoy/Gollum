@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Searchbar from "./Searchbar"
 import { useAuth0 } from "@auth0/auth0-react"
+import { URL } from "../models/redirectURL"
 
 const HamburgerMenu = () => {
     const [openNav, setOpenNav] = useState(false)
@@ -17,7 +18,7 @@ const HamburgerMenu = () => {
 
     const CLIENT_ID = "1466b5977d204641aa0538b887b91e9e";
     const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-    const REDIRECT_URL_AFTER_LOGIN = "https://gollum-0q6i.onrender.com/";
+    const REDIRECT_URL_AFTER_LOGIN = URL;
     const SPACE_DELIMITER = "%20";
     const SCOPES = [
       "user-read-currently-playing",

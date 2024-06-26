@@ -5,6 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { Artists, Albums } from "../models/spotifyTypes"
+import { URL } from "../models/url"
 
 interface BaseItem {
     name: string;
@@ -39,9 +40,6 @@ const LikeAndDislike = (props: propsData) => {
 
     const { user } = useAuth0()
 
-    // const URL = 'https://gollum-0q6i.onrender.com'
-    const URL = 'http://localhost:3000'
-    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sendLikedItemToUser = async (_data: Artists|Albums|any) => {
         try {

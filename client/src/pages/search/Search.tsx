@@ -7,12 +7,10 @@ import LikeAndDislike from "../../components/LikeAndDislike"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Artists, Albums } from "../../models/spotifyTypes"
 import Footer from "../../components/Footer"
+import { URL } from "../../models/url"
 // import Playbutton from "../../components/Playbutton"
 
 const Search = () => {
-    // const URL = 'https://gollum-0q6i.onrender.com'
-    const URL = 'http://localhost:3000'
-
     const [selectedCategory, setSelectedCategory] = useState("Everything")
 
     interface BaseItem {

@@ -1,6 +1,4 @@
-// const URL = 'https://gollum-0q6i.onrender.com'
-const URL = 'http://localhost:3000'
-
+import { URL } from "../../models/url"
 
 export const retrieveNewAlbumReleases = async () => {
     try {
@@ -36,7 +34,7 @@ export const getUserRecentTracks = async () => {
 export const linkSpotifyAccount = async () => {
     try {
         const aT = localStorage.getItem("accessToken")
-        const spotifyAccount = await fetch(`https://gollum-0q6i.onrender.com/spotify/getUserProfile/`, {
+        const spotifyAccount = await fetch(`${URL}/spotify/getUserProfile/`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',

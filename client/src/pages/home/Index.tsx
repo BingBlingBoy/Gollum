@@ -5,13 +5,10 @@ import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import Footer from "../../components/Footer"
 import { Data } from "../../models/userTypes"
+import { URL } from "../../models/url"
 // import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
-
-    // const URL = 'https://gollum-0q6i.onrender.com'
-    const URL = 'http://localhost:3000'
-
 
     const {
         user,

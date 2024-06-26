@@ -3,6 +3,7 @@ import Searchbar from "./Searchbar"
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import HamburgerMenu from "./HamburgerMenu";
+import { URL } from "../models/redirectURL";
 
 interface Map {
     [key: string]: string | undefined
@@ -11,9 +12,6 @@ interface Map {
 const Navbar = () => {
 
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-    // const URL = 'https://gollum-kappa.vercel.app/'
-    const URL = 'http://localhost:5173/'
 
     const CLIENT_ID = "1466b5977d204641aa0538b887b91e9e";
     const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";

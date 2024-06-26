@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Footer from "../../components/Footer";
 import { Artists, SpotifyToken } from "../../models/spotifyTypes";
 import { getUserRecentTracks, linkSpotifyAccount } from "../../api/spotify/SpotifyAPI";
+import { URL } from "../../models/url";
 
 interface Track {
     track: TracksFromSearch;
@@ -27,7 +28,7 @@ const Profile = () => {
 
     const gettingLikedAlbums = async () => {
         try {
-            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedalbum', {
+            const response = await fetch(`${URL}/user/get/ratedalbum`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -48,7 +49,7 @@ const Profile = () => {
 
     const gettingLikedArtists = async () => {
         try {
-            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedartist', {
+            const response = await fetch(`${URL}/user/get/ratedartist`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -69,7 +70,7 @@ const Profile = () => {
 
     const gettingLikedTracks = async () => {
         try {
-            const response = await fetch('https://gollum-0q6i.onrender.com/user/get/ratedtrack', {
+            const response = await fetch(`${URL}/user/get/ratedtrack`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
