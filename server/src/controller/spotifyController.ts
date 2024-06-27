@@ -119,7 +119,7 @@ router.get('/getToken', async (req, res) => {
 router.get('/newReleases', async (req, res) => {
     try {
         const token = await getSpotifyAccessToken()
-        const result = await fetch(`https://api.spotify.com/v1/browse/new-releases`, {
+        const result = await fetch(`https://api.spotify.com/v1/browse/new-release`, {
             method: 'GET',
             headers: { 'Authorization' : 'Bearer ' + token.access_token}
         });
@@ -131,7 +131,7 @@ router.get('/newReleases', async (req, res) => {
         res.json({
             albums: data.albums
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({error: 'Failed to get new Released albums'})
     }
 })

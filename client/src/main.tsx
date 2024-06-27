@@ -40,7 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       cacheLocation="localstorage"
     >
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />  
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </Auth0Provider>
   </React.StrictMode>,

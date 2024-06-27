@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query"
 import Footer from "../../components/Footer"
 import { Data } from "../../models/userTypes"
 import { URL } from "../../models/url"
+import { Bounce, ToastContainer } from "react-toastify"
 // import { useMutation } from "@tanstack/react-query"
 
 const Index = () => {
@@ -65,6 +66,19 @@ const Index = () => {
                 </p>
             </div>
             <Newreleases />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Bounce}
+            />
             <Footer />
         </>
     )

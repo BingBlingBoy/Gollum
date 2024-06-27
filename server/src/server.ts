@@ -58,6 +58,9 @@ app.post('/spotify/getrefreshtoken', jsonParser, async (req, res) => {
 app.use("/spotify", spotifyRoutes)
 app.use("/user", userRoutes)
 
+app.get('*', async (req, res) => {
+    return res.status(404).json({error: "not a valid page"})
+})
 
 app.listen(port, () => {
     console.log(`Server goes on http://localhost:${port}`)

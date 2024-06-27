@@ -3,10 +3,13 @@ import { URL } from "../../models/url"
 export const retrieveNewAlbumReleases = async () => {
     try {
         const response = await fetch(`${URL}/spotify/newReleases`)
+        if (!response.ok) {
+            throw new Error(`Failed to fetch new releases. Status: ${response.status}`);
+        }
         const data = await response.json()
         return data.albums.items
     } catch (error) {
-        return error
+        throw new Error((error as Error).message)
     }
 }
 

@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import { Albums, Artists } from "../models/spotifyTypes"
 import { retrieveNewAlbumReleases } from "../api/spotify/SpotifyAPI"
+import 'react-toastify/ReactToastify.css'
+import { toast } from "react-toastify"
 
 const Newreleases = () => {
 
+
   const {data: newReleases, error, isLoading } = useQuery({
     queryKey: ['newReleases'],
-    queryFn: retrieveNewAlbumReleases
+    queryFn: retrieveNewAlbumReleases,
   })
 
   if (isLoading) {
@@ -14,7 +17,12 @@ const Newreleases = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    toast.error(error.message, {
+      toastId: 'success1',
+    })
+    return (
+      <h1>HELLO</h1>
+    )
   }
 
   const content = (
@@ -31,7 +39,7 @@ const Newreleases = () => {
                 <p className="absolute bottom-7 left-4 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-md" key={j}>{d.name}</p>
               ))}
             </div>
-          ))}
+          ))} 
         </div>
       </div>
     </>
