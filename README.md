@@ -1,2 +1,4 @@
 # Gollum
-The best website you have ever seen
+
+Frontend link: https://gollum-kappa.vercel.app/
+Backend link: https://gollum-0q6i.onrender.com
